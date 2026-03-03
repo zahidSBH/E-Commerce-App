@@ -1,0 +1,51 @@
+const theme = Object.freeze({
+  colors: {
+    primary: '#FF6B00',
+    primaryLight: '#FF8C33',
+    primaryDark: '#CC5500',
+    primaryFaded: '#FFF0E6',
+    background: '#FFFFFF',
+    surface: '#FAFAFA',
+    border: '#F0E8E0',
+    textPrimary: '#1A1A1A',
+    textSecondary: '#6B6B6B',
+    textMuted: '#AAAAAA',
+    white: '#FFFFFF',
+    black: '#000000',
+    error: '#D32F2F',
+    success: '#388E3C',
+  },
+  typography: {
+    fontSizeXS: 10,
+    fontSizeSM: 12,
+    fontSizeMD: 14,
+    fontSizeLG: 16,
+    fontSizeXL: 20,
+    fontSizeXXL: 24,
+    fontWeightRegular: '400',
+    fontWeightMedium: '500',
+    fontWeightSemiBold: '600',
+    fontWeightBold: '700',
+  },
+  spacing: {
+    xs: 4,
+    sm: 8,
+    md: 16,
+    lg: 24,
+    xl: 32,
+    xxl: 48,
+  },
+  borderRadius: {
+    sm: 4,
+    md: 8,
+    lg: 16,
+    xl: 24,
+    full: 9999,
+  },
+  tabBar: {
+    height: 65,
+    iconSize: 22,
+  },
+});
+
+export default theme;
