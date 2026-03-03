@@ -2,13 +2,7 @@ import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import theme from '@/constants/theme';
 
-const DEFAULT_PROPS = {
-  title: '',
-  subtitle: '',
-  icon: null,
-};
-
-const ScreenLabel = ({ title = DEFAULT_PROPS.title, subtitle = DEFAULT_PROPS.subtitle, icon = DEFAULT_PROPS.icon }) => {
+const ScreenLabel = ({ title = '', subtitle = '', icon = null }) => {
   return (
     <View style={styles.container}>
       <View style={styles.iconWrapper}>{icon}</View>

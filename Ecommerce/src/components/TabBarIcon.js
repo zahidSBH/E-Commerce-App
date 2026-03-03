@@ -2,14 +2,7 @@ import React from 'react';
 import { Ionicons } from '@expo/vector-icons';
 import TabRoutes from '@/enums/TabRoutes';
 
-const DEFAULT_PROPS = {
-  route: TabRoutes.HOME,
-  focused: false,
-  color: '#000000',
-  size: 22,
-};
-
-const resolveIconName = ({ route = DEFAULT_PROPS.route, focused = DEFAULT_PROPS.focused }) => {
+const resolveIconName = ({ route = TabRoutes.HOME, focused = false }) => {
   switch (route) {
     case TabRoutes.HOME:
       return focused ? 'home' : 'home-outline';
@@ -23,10 +16,10 @@ const resolveIconName = ({ route = DEFAULT_PROPS.route, focused = DEFAULT_PROPS.
 };
 
 const TabBarIcon = ({
-  route = DEFAULT_PROPS.route,
-  focused = DEFAULT_PROPS.focused,
-  color = DEFAULT_PROPS.color,
-  size = DEFAULT_PROPS.size,
+  route = TabRoutes.HOME,
+  focused = false,
+  color = '#000000',
+  size = 22,
 }) => {
   const iconName = resolveIconName({ route, focused });
 
