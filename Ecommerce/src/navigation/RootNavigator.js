@@ -1,16 +1,16 @@
-import React, { useEffect, useState } from 'react';
-import { View, ActivityIndicator, StyleSheet } from 'react-native';
-import { onAuthStateChanged } from 'firebase/auth';
+import React, { useEffect, useState } from "react";
+import { View, ActivityIndicator, StyleSheet } from "react-native";
+import { onAuthStateChanged } from "firebase/auth";
 
-import { auth } from '@/config/firebase';
-import AuthNavigator from '@/navigation/AuthNavigator';
-import MainTabNavigator from '@/navigation/MainTabNavigator';
-import theme from '@/constants/theme';
+import { auth } from "@/config/firebase";
+import AuthNavigator from "@/navigation/AuthNavigator";
+import MainTabNavigator from "@/navigation/MainTabNavigator";
+import theme from "@/constants/theme";
 
 const AuthState = Object.freeze({
-  LOADING: 'LOADING',
-  AUTHENTICATED: 'AUTHENTICATED',
-  UNAUTHENTICATED: 'UNAUTHENTICATED',
+  LOADING: "LOADING",
+  AUTHENTICATED: "AUTHENTICATED",
+  UNAUTHENTICATED: "UNAUTHENTICATED",
 });
 
 const resolveNavigator = (authState) => {
@@ -50,8 +50,8 @@ const RootNavigator = () => {
 const styles = StyleSheet.create({
   loaderContainer: {
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: "center",
+    justifyContent: "center",
     backgroundColor: theme.colors.background,
   },
 });

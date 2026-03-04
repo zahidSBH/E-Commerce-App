@@ -1,7 +1,7 @@
-import React from 'react';
-import { Ionicons } from '@expo/vector-icons';
-import ScreenLabel from '@/components/ScreenLabel';
-import theme from '@/constants/theme';
+import React from "react";
+import { Ionicons } from "@expo/vector-icons";
+import ScreenLabel from "@/components/ScreenLabel";
+import theme from "@/constants/theme";
 
 const ProfileScreen = () => {
   const renderIcon = () => (
