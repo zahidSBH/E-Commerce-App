@@ -1,15 +1,22 @@
-import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
-import theme from '@/constants/theme';
+import React, { useState } from "react";
+import {
+  View,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  StyleSheet,
+} from "react-native";
+import { Ionicons } from "@expo/vector-icons";
+import theme from "@/constants/theme";
+import PasswordToggle from "@/components/PasswordToggle";
 
 const FormInput = ({
-  label = '',
-  placeholder = '',
+  label = "",
+  placeholder = "",
   secureTextEntry = false,
-  keyboardType = 'default',
-  autoCapitalize = 'none',
-  value = '',
+  keyboardType = "default",
+  autoCapitalize = "none",
+  value = "",
   onChangeText = () => {},
   onBlur = () => {},
   error = null,
@@ -19,16 +26,6 @@ const FormInput = ({
   const togglePasswordVisibility = () => setIsPasswordVisible((prev) => !prev);
 
   const resolveSecureEntry = () => secureTextEntry && !isPasswordVisible;
-
-  const renderPasswordToggle = () => {
-    if (!secureTextEntry) return null;
-    const iconName = isPasswordVisible ? 'eye' : 'eye-off';
-    return (
-      <TouchableOpacity onPress={togglePasswordVisibility} style={styles.eyeIcon}>
-        <Ionicons name={iconName} size={20} color={theme.colors.textMuted} />
-      </TouchableOpacity>
-    );
-  };
 
   const renderError = () => {
     if (!error) return null;
@@ -55,7 +52,11 @@ const FormInput = ({
           onChangeText={onChangeText}
           onBlur={onBlur}
         />
-        {renderPasswordToggle()}
+        <PasswordToggle
+          secure={secureTextEntry}
+          visible={isPasswordVisible}
+          onToggle={togglePasswordVisibility}
+        />
       </View>
       {renderError()}
     </View>
@@ -73,8 +74,8 @@ const styles = StyleSheet.create({
     marginBottom: theme.spacing.xs,
   },
   inputContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
     backgroundColor: theme.colors.white,
     borderRadius: theme.borderRadius.lg,
     borderWidth: 1.5,

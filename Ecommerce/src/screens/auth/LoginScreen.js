@@ -10,10 +10,10 @@ import {
 } from 'react-native';
 import { useForm, Controller } from 'react-hook-form';
 
-import FormInput from '@/components/FormInput';
+import FormInput from '@/components/Input';
 import PrimaryButton from '@/components/PrimaryButton';
 import useAuth from '@/hooks/useAuth';
-import validationRules from '@/constants/validationRules';
+import authValidation from '@/validation/authValidation';
 import AuthRoutes from '@/enums/AuthRoutes';
 import theme from '@/constants/theme';
 
@@ -56,7 +56,7 @@ const LoginScreen = ({ navigation = null }) => {
     <Controller
       control={control}
       name="email"
-      rules={validationRules.email}
+      rules={authValidation.email}
       render={({ field: { onChange, onBlur, value } }) => (
         <FormInput
           label="Email Address"
@@ -75,7 +75,7 @@ const LoginScreen = ({ navigation = null }) => {
     <Controller
       control={control}
       name="password"
-      rules={validationRules.password}
+      rules={authValidation.password}
       render={({ field: { onChange, onBlur, value } }) => (
         <FormInput
           label="Password"

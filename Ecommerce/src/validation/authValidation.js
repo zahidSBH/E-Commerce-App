@@ -1,16 +1,18 @@
-const validationRules = Object.freeze({
+import AppConstants from '@/constants/AppConstants';
+
+const authValidation = Object.freeze({
   fullName: {
     required: 'Full name is required',
     minLength: {
-      value: 2,
-      message: 'Name must be at least 2 characters',
+      value: AppConstants.FULL_NAME_MIN_LENGTH,
+      message: `Name must be at least ${AppConstants.FULL_NAME_MIN_LENGTH} characters`,
     },
     maxLength: {
-      value: 50,
-      message: 'Name must be less than 50 characters',
+      value: AppConstants.FULL_NAME_MAX_LENGTH,
+      message: `Name must be less than ${AppConstants.FULL_NAME_MAX_LENGTH} characters`,
     },
     pattern: {
-      value: /^[a-zA-Z\s]+$/,
+      value: AppConstants.FULL_NAME_PATTERN,
       message: 'Name can only contain letters and spaces',
     },
   },
@@ -18,7 +20,7 @@ const validationRules = Object.freeze({
   email: {
     required: 'Email address is required',
     pattern: {
-      value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+      value: AppConstants.EMAIL_PATTERN,
       message: 'Please enter a valid email address',
     },
   },
@@ -26,11 +28,11 @@ const validationRules = Object.freeze({
   password: {
     required: 'Password is required',
     minLength: {
-      value: 8,
-      message: 'Password must be at least 8 characters',
+      value: AppConstants.PASSWORD_MIN_LENGTH,
+      message: `Password must be at least ${AppConstants.PASSWORD_MIN_LENGTH} characters`,
     },
     pattern: {
-      value: /^(?=.*[A-Z])(?=.*[0-9])/,
+      value: AppConstants.PASSWORD_PATTERN,
       message: 'Password must contain at least one uppercase letter and one number',
     },
   },
@@ -42,4 +44,4 @@ const validationRules = Object.freeze({
   }),
 });
 
-export default validationRules;
+export default authValidation;
