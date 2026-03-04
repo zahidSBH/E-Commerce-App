@@ -1,10 +1,15 @@
-import React from 'react';
-import { TouchableOpacity, Text, ActivityIndicator, StyleSheet } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
-import theme from '@/constants/theme';
+import React from "react";
+import {
+  TouchableOpacity,
+  Text,
+  ActivityIndicator,
+  StyleSheet,
+} from "react-native";
+import { Ionicons } from "@expo/vector-icons";
+import theme from "@/constants/theme";
 
 const PrimaryButton = ({
-  label = '',
+  label = "",
   onPress = () => {},
   loading = false,
   disabled = false,
@@ -23,7 +28,12 @@ const PrimaryButton = ({
       <>
         <Text style={styles.label}>{label}</Text>
         {showArrow && (
-          <Ionicons name="arrow-forward" size={18} color={theme.colors.white} style={styles.arrow} />
+          <Ionicons
+            name="arrow-forward"
+            size={18}
+            color={theme.colors.white}
+            style={styles.arrow}
+          />
         )}
       </>
     );
@@ -43,9 +53,9 @@ const PrimaryButton = ({
 
 const styles = StyleSheet.create({
   button: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
     backgroundColor: theme.colors.primary,
     borderRadius: theme.borderRadius.lg,
     height: 56,

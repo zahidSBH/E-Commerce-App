@@ -1,8 +1,8 @@
-import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
-import theme from '@/constants/theme';
+import React from "react";
+import { View, Text, StyleSheet } from "react-native";
+import theme from "@/constants/theme";
 
-const ScreenLabel = ({ title = '', subtitle = '', icon = null }) => {
+const ScreenLabel = ({ title = "", subtitle = "", icon = null }) => {
   return (
     <View style={styles.container}>
       <View style={styles.iconWrapper}>{icon}</View>
@@ -15,8 +15,8 @@ const ScreenLabel = ({ title = '', subtitle = '', icon = null }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: "center",
+    justifyContent: "center",
     backgroundColor: theme.colors.background,
     gap: theme.spacing.md,
   },
@@ -25,8 +25,8 @@ const styles = StyleSheet.create({
     height: 72,
     borderRadius: theme.borderRadius.full,
     backgroundColor: theme.colors.primaryFaded,
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: "center",
+    justifyContent: "center",
     marginBottom: theme.spacing.sm,
   },
   title: {

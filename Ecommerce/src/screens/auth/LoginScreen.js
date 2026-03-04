@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 import {
   View,
   Text,
@@ -7,15 +7,15 @@ import {
   StyleSheet,
   KeyboardAvoidingView,
   Platform,
-} from 'react-native';
-import { useForm, Controller } from 'react-hook-form';
+} from "react-native";
+import { useForm, Controller } from "react-hook-form";
 
-import FormInput from '@/components/Input';
-import PrimaryButton from '@/components/PrimaryButton';
-import useAuth from '@/hooks/useAuth';
-import authValidation from '@/validation/authValidation';
-import AuthRoutes from '@/enums/AuthRoutes';
-import theme from '@/constants/theme';
+import FormInput from "@/components/Input";
+import PrimaryButton from "@/components/PrimaryButton";
+import useAuth from "@/hooks/useAuth";
+import { authValidation } from "@/validation/authValidation";
+import AuthRoutes from "@/enums/AuthRoutes";
+import theme from "@/constants/theme";
 
 const LoginScreen = ({ navigation = null }) => {
   const { login, loading, error, clearError } = useAuth();
@@ -26,8 +26,8 @@ const LoginScreen = ({ navigation = null }) => {
     formState: { errors },
   } = useForm({
     defaultValues: {
-      email: '',
-      password: '',
+      email: "",
+      password: "",
     },
   });
 
@@ -102,7 +102,7 @@ const LoginScreen = ({ navigation = null }) => {
   return (
     <KeyboardAvoidingView
       style={styles.flex}
-      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
     >
       <ScrollView
         contentContainerStyle={styles.container}
@@ -137,7 +137,7 @@ const styles = StyleSheet.create({
     paddingBottom: theme.spacing.xxl,
   },
   header: {
-    alignItems: 'center',
+    alignItems: "center",
     marginBottom: theme.spacing.xl,
   },
   title: {
@@ -149,20 +149,20 @@ const styles = StyleSheet.create({
   subtitle: {
     fontSize: theme.typography.fontSizeMD,
     color: theme.colors.textSecondary,
-    textAlign: 'center',
+    textAlign: "center",
   },
   firebaseError: {
     fontSize: theme.typography.fontSizeSM,
     color: theme.colors.error,
-    textAlign: 'center',
+    textAlign: "center",
     marginBottom: theme.spacing.md,
-    backgroundColor: '#FFEBEE',
+    backgroundColor: "#FFEBEE",
     padding: theme.spacing.sm,
     borderRadius: theme.borderRadius.md,
   },
   footer: {
-    flexDirection: 'row',
-    justifyContent: 'center',
+    flexDirection: "row",
+    justifyContent: "center",
     marginTop: theme.spacing.xl,
   },
   footerText: {
