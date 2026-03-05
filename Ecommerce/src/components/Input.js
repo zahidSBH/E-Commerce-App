@@ -10,7 +10,7 @@ import { Ionicons } from "@expo/vector-icons";
 import theme from "@/constants/theme";
 import PasswordToggle from "@/components/PasswordToggle";
 
-const FormInput = ({
+const Input = ({
   label = "",
   placeholder = "",
   secureTextEntry = false,
@@ -102,4 +102,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default FormInput;
+export default Input;

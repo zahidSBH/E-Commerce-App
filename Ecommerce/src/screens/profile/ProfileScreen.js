@@ -1,7 +1,12 @@
 import React from "react";
+<<<<<<< HEAD
 import { View, Text, StyleSheet } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import useUserProfile from "@/hooks/useUserProfile";
+=======
+import { Ionicons } from "@expo/vector-icons";
+import ScreenLabel from "@/components/ScreenLabel";
+>>>>>>> main
 import theme from "@/constants/theme";
 
 const ProfileScreen = () => {
