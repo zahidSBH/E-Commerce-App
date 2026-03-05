@@ -13,7 +13,7 @@ import { useForm, Controller } from "react-hook-form";
 import FormInput from "@/components/Input";
 import PrimaryButton from "@/components/PrimaryButton";
 import useAuth from "@/hooks/useAuth";
-import authValidation from "@/validation/authValidation";
+import { authValidation } from "@/validation/authValidation";
 import AuthRoutes from "@/enums/AuthRoutes";
 import theme from "@/constants/theme";
 

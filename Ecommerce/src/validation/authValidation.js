@@ -1,6 +1,6 @@
 import AppConstants from "@/constants/AppConstants";
 
-const authValidation = Object.freeze({
+export const authValidation = Object.freeze({
   fullName: {
     required: "Full name is required",
     minLength: {
@@ -44,5 +44,25 @@ const authValidation = Object.freeze({
       value === getValues("password") || "Passwords do not match",
   }),
 });
+
+export function validateEmailPayload(email) {
+  if (!email || typeof email !== "string" || email.trim().length === 0) {
+    return "Email address is required.";
+  }
+  if (!AppConstants.EMAIL_PATTERN.test(email.trim())) {
+    return "Please enter a valid email address.";
+  }
+  return null;
+}
+
+export function validatePasswordPayload(password) {
+  if (!password || typeof password !== "string" || password.length === 0) {
+    return "Password is required.";
+  }
+  if (password.length < AppConstants.PASSWORD_MIN_LENGTH) {
+    return `Password must be at least ${AppConstants.PASSWORD_MIN_LENGTH} characters.`;
+  }
+  return null;
+}
 
 export default authValidation;
