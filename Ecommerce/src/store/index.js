@@ -1,11 +1,13 @@
 import { configureStore } from '@reduxjs/toolkit';
 import userReducer, { fetchProfile, updateProfile } from '@/store/slices/userSlice';
 import productReducer from '@/store/slices/productSlice';
+import cartReducer from '@/store/slices/cartSlice';
 
 const store = configureStore({
   reducer: {
     user: userReducer,
     product: productReducer,
+    cart: cartReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
