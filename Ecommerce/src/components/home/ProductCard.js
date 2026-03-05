@@ -1,20 +1,8 @@
-import React from 'react';
-import {
-  View,
-  Text,
-  Image,
-  TouchableOpacity,
-  StyleSheet,
-} from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
-import theme from '@/constants/theme';
-import createProductModel from '@/models/productModel';
-
-const DEFAULT_PROPS = {
-  product: createProductModel(),
-  onPress: () => {},
-  width: 160,
-};
+import React from "react";
+import { View, Text, Image, TouchableOpacity, StyleSheet } from "react-native";
+import { Ionicons } from "@expo/vector-icons";
+import theme from "@/constants/theme";
+import createProductModel from "@/models/productModel";
 
 const DiscountBadge = ({ discount = 0 }) => {
   if (!discount || discount <= 0) return null;
@@ -52,9 +40,9 @@ const PriceRow = ({ price = 0, originalPrice = 0, discount = 0 }) => (
 );
 
 const ProductCard = ({
-  product = DEFAULT_PROPS.product,
-  onPress = DEFAULT_PROPS.onPress,
-  width = DEFAULT_PROPS.width,
+  product = createProductModel(),
+  onPress = () => {},
+  width = 160,
 }) => {
   return (
     <TouchableOpacity
@@ -73,7 +61,9 @@ const ProductCard = ({
       </View>
       <View style={styles.details}>
         <Text style={styles.category}>{product.category}</Text>
-        <Text style={styles.name} numberOfLines={2}>{product.name}</Text>
+        <Text style={styles.name} numberOfLines={2}>
+          {product.name}
+        </Text>
         <RatingRow rating={product.rating} reviewCount={product.reviewCount} />
         <PriceRow
           price={product.price}
@@ -89,7 +79,7 @@ const styles = StyleSheet.create({
   card: {
     backgroundColor: theme.colors.white,
     borderRadius: theme.borderRadius.lg,
-    overflow: 'hidden',
+    overflow: "hidden",
     shadowColor: theme.colors.black,
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.06,
@@ -97,16 +87,16 @@ const styles = StyleSheet.create({
     elevation: 3,
   },
   imageContainer: {
-    width: '100%',
+    width: "100%",
     height: 160,
-    position: 'relative',
+    position: "relative",
   },
   image: {
-    width: '100%',
-    height: '100%',
+    width: "100%",
+    height: "100%",
   },
   discountBadge: {
-    position: 'absolute',
+    position: "absolute",
     top: theme.spacing.sm,
     left: theme.spacing.sm,
     backgroundColor: theme.colors.primary,
@@ -120,7 +110,7 @@ const styles = StyleSheet.create({
     color: theme.colors.white,
   },
   newBadge: {
-    position: 'absolute',
+    position: "absolute",
     top: theme.spacing.sm,
     right: theme.spacing.sm,
     backgroundColor: theme.colors.success,
@@ -140,7 +130,7 @@ const styles = StyleSheet.create({
   category: {
     fontSize: theme.typography.fontSizeXS,
     color: theme.colors.textMuted,
-    textTransform: 'uppercase',
+    textTransform: "uppercase",
     letterSpacing: 0.5,
   },
   name: {
@@ -150,8 +140,8 @@ const styles = StyleSheet.create({
     lineHeight: 18,
   },
   ratingRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
     gap: 3,
   },
   ratingText: {
@@ -164,8 +154,8 @@ const styles = StyleSheet.create({
     color: theme.colors.textMuted,
   },
   priceRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
     gap: theme.spacing.xs,
   },
   price: {
@@ -176,7 +166,7 @@ const styles = StyleSheet.create({
   originalPrice: {
     fontSize: theme.typography.fontSizeXS,
     color: theme.colors.textMuted,
-    textDecorationLine: 'line-through',
+    textDecorationLine: "line-through",
   },
 });
 

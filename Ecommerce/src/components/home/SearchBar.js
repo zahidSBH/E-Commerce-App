@@ -1,16 +1,11 @@
-import React from 'react';
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
-import theme from '@/constants/theme';
-
-const DEFAULT_PROPS = {
-  onPress: () => {},
-  placeholder: 'Search products...',
-};
+import React from "react";
+import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
+import { Ionicons } from "@expo/vector-icons";
+import theme from "@/constants/theme";
 
 const SearchBar = ({
-  onPress = DEFAULT_PROPS.onPress,
-  placeholder = DEFAULT_PROPS.placeholder,
+  onPress = () => {},
+  placeholder = "Search products...",
 }) => {
   return (
     <TouchableOpacity
@@ -18,7 +13,11 @@ const SearchBar = ({
       onPress={onPress}
       activeOpacity={0.8}
     >
-      <Ionicons name="search-outline" size={18} color={theme.colors.textMuted} />
+      <Ionicons
+        name="search-outline"
+        size={18}
+        color={theme.colors.textMuted}
+      />
       <Text style={styles.placeholder}>{placeholder}</Text>
     </TouchableOpacity>
   );
@@ -26,8 +25,8 @@ const SearchBar = ({
 
 const styles = StyleSheet.create({
   container: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
     gap: theme.spacing.sm,
     marginHorizontal: theme.spacing.lg,
     marginVertical: theme.spacing.sm,
