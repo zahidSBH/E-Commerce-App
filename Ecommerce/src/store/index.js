@@ -1,18 +1,20 @@
-import { configureStore } from "@reduxjs/toolkit";
-import userReducer from "@/store/slices/userSlice";
+import { configureStore } from '@reduxjs/toolkit';
+import userReducer, { fetchProfile, updateProfile } from '@/store/slices/userSlice';
+import productReducer from '@/store/slices/productSlice';
 
 const store = configureStore({
   reducer: {
     user: userReducer,
+    product: productReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
       serializableCheck: {
         ignoredActions: [
-          "user/fetchProfile/fulfilled",
-          "user/updateProfile/fulfilled",
+          fetchProfile.fulfilled.type,
+          updateProfile.fulfilled.type,
         ],
-        ignoredPaths: ["user.profile.createdAt", "user.profile.updatedAt"],
+        ignoredPaths: ['user.profile.createdAt', 'user.profile.updatedAt'],
       },
     }),
 });
