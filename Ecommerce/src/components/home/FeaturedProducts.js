@@ -1,24 +1,14 @@
 import React from "react";
-import { View, Text, FlatList, StyleSheet } from "react-native";
+import { View, FlatList, StyleSheet, Dimensions } from "react-native";
 import ProductCard from "@/components/home/ProductCard";
+import SectionHeader from "@/components/common/SectionHeader";
 import theme from "@/constants/theme";
 
-const DEFAULT_PROPS = {
-  products: [],
-  onProductPress: () => {},
-};
+const { width: SCREEN_WIDTH } = Dimensions.get("window");
+const CARD_WIDTH =
+  (SCREEN_WIDTH - theme.spacing.lg * 2 - theme.spacing.sm) / 2;
 
-const SectionHeader = ({ title = "", subtitle = "" }) => (
-  <View style={styles.sectionHeader}>
-    <Text style={styles.sectionTitle}>{title}</Text>
-    {subtitle ? <Text style={styles.sectionSubtitle}>{subtitle}</Text> : null}
-  </View>
-);
-
-const FeaturedProducts = ({
-  products = DEFAULT_PROPS.products,
-  onProductPress = DEFAULT_PROPS.onProductPress,
-}) => {
+const FeaturedProducts = ({ products = [], onProductPress = () => {} }) => {
   if (!products || products.length === 0) return null;
 
   return (
@@ -31,7 +21,11 @@ const FeaturedProducts = ({
         showsHorizontalScrollIndicator={false}
         contentContainerStyle={styles.listContent}
         renderItem={({ item }) => (
-          <ProductCard product={item} onPress={onProductPress} width={160} />
+          <ProductCard
+            product={item}
+            onPress={onProductPress}
+            width={CARD_WIDTH}
+          />
         )}
         ItemSeparatorComponent={() => <View style={styles.separator} />}
       />
@@ -42,22 +36,6 @@ const FeaturedProducts = ({
 const styles = StyleSheet.create({
   container: {
     marginBottom: theme.spacing.md,
-  },
-  sectionHeader: {
-    flexDirection: "row",
-    alignItems: "baseline",
-    justifyContent: "space-between",
-    paddingHorizontal: theme.spacing.lg,
-    marginBottom: theme.spacing.sm,
-  },
-  sectionTitle: {
-    fontSize: theme.typography.fontSizeLG,
-    fontWeight: theme.typography.fontWeightBold,
-    color: theme.colors.textPrimary,
-  },
-  sectionSubtitle: {
-    fontSize: theme.typography.fontSizeSM,
-    color: theme.colors.textMuted,
   },
   listContent: {
     paddingHorizontal: theme.spacing.lg,

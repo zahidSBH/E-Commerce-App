@@ -3,12 +3,6 @@ import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import theme from "@/constants/theme";
 
-const DEFAULT_PROPS = {
-  userName: "",
-  cartCount: 0,
-  onCartPress: () => {},
-};
-
 const Greeting = ({ userName = "" }) => (
   <View style={styles.greetingContainer}>
     <Text style={styles.greetingText}>Hello, 👋</Text>
@@ -34,9 +28,9 @@ const CartButton = ({ cartCount = 0, onPress = () => {} }) => (
 );
 
 const HomeHeader = ({
-  userName = DEFAULT_PROPS.userName,
-  cartCount = DEFAULT_PROPS.cartCount,
-  onCartPress = DEFAULT_PROPS.onCartPress,
+  userName = "",
+  cartCount = 0,
+  onCartPress = () => {},
 }) => {
   return (
     <View style={styles.container}>

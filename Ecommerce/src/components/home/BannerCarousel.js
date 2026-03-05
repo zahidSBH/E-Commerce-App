@@ -8,27 +8,10 @@ import {
   Dimensions,
 } from "react-native";
 import theme from "@/constants/theme";
+import BANNERS from "@/data/banners";
 
 const { width: SCREEN_WIDTH } = Dimensions.get("window");
 const BANNER_WIDTH = SCREEN_WIDTH - theme.spacing.lg * 2;
-
-const BANNERS = [
-  {
-    id: "b001",
-    imageUrl:
-      "https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?w=800",
-  },
-  {
-    id: "b002",
-    imageUrl:
-      "https://images.unsplash.com/photo-1607082349566-187342175e2f?w=800",
-  },
-  {
-    id: "b003",
-    imageUrl:
-      "https://images.unsplash.com/photo-1483985988355-763728e1935b?w=800",
-  },
-];
 
 const DotIndicator = ({ total = 0, activeIndex = 0 }) => (
   <View style={styles.dotsContainer}>
@@ -44,6 +27,16 @@ const DotIndicator = ({ total = 0, activeIndex = 0 }) => (
   </View>
 );
 
+const BannerItem = ({ item = {} }) => (
+  <TouchableOpacity activeOpacity={0.95} style={styles.bannerItem}>
+    <Image
+      source={{ uri: item.imageUrl }}
+      style={styles.bannerImage}
+      resizeMode="cover"
+    />
+  </TouchableOpacity>
+);
+
 const BannerCarousel = () => {
   const [activeIndex, setActiveIndex] = useState(0);
   const flatListRef = useRef(null);
@@ -57,16 +50,6 @@ const BannerCarousel = () => {
   const viewabilityConfig = useRef({
     viewAreaCoveragePercentThreshold: 50,
   }).current;
-
-  const BannerItem = ({ item }) => (
-    <TouchableOpacity activeOpacity={0.95} style={styles.bannerItem}>
-      <Image
-        source={{ uri: item.imageUrl }}
-        style={styles.bannerImage}
-        resizeMode="cover"
-      />
-    </TouchableOpacity>
-  );
 
   return (
     <View style={styles.container}>

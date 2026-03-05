@@ -4,12 +4,6 @@ import { Ionicons } from "@expo/vector-icons";
 import theme from "@/constants/theme";
 import createProductModel from "@/models/productModel";
 
-const DEFAULT_PROPS = {
-  product: createProductModel(),
-  onPress: () => {},
-  width: 160,
-};
-
 const DiscountBadge = ({ discount = 0 }) => {
   if (!discount || discount <= 0) return null;
   return (
@@ -46,9 +40,9 @@ const PriceRow = ({ price = 0, originalPrice = 0, discount = 0 }) => (
 );
 
 const ProductCard = ({
-  product = DEFAULT_PROPS.product,
-  onPress = DEFAULT_PROPS.onPress,
-  width = DEFAULT_PROPS.width,
+  product = createProductModel(),
+  onPress = () => {},
+  width = 160,
 }) => {
   return (
     <TouchableOpacity

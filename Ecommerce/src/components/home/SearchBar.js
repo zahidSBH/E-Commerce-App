@@ -3,14 +3,9 @@ import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import theme from "@/constants/theme";
 
-const DEFAULT_PROPS = {
-  onPress: () => {},
-  placeholder: "Search products...",
-};
-
 const SearchBar = ({
-  onPress = DEFAULT_PROPS.onPress,
-  placeholder = DEFAULT_PROPS.placeholder,
+  onPress = () => {},
+  placeholder = "Search products...",
 }) => {
   return (
     <TouchableOpacity
