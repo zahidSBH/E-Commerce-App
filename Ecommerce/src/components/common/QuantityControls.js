@@ -62,7 +62,6 @@ const QuantityControls = ({
     </View>
   );
 };
-
 const styles = StyleSheet.create({
   row: {
     flexDirection: "row",
@@ -82,12 +81,12 @@ const styles = StyleSheet.create({
     borderRadius: theme.borderRadius.full,
     paddingHorizontal: theme.spacing.sm,
     paddingVertical: theme.spacing.xs,
-    borderWidth: 1,
+    borderWidth: theme.borderWidth.sm,
     borderColor: theme.colors.border,
   },
   button: {
-    width: 32,
-    height: 32,
+    width: theme.sizes.controlSm,
+    height: theme.sizes.controlSm,
     borderRadius: theme.borderRadius.full,
     backgroundColor: theme.colors.white,
     alignItems: "center",
@@ -95,16 +94,15 @@ const styles = StyleSheet.create({
     shadowColor: theme.colors.black,
     shadowOffset: { width: 0, height: 1 },
     shadowOpacity: 0.08,
-    shadowRadius: 4,
-    elevation: 2,
+    shadowRadius: theme.elevation.md,
+    elevation: theme.elevation.sm,
   },
   value: {
     fontSize: theme.typography.fontSizeLG,
     fontWeight: theme.typography.fontWeightBold,
     color: theme.colors.textPrimary,
-    minWidth: 24,
+    minWidth: theme.sizes.quantityLabel,
     textAlign: "center",
   },
 });
-
 export default QuantityControls;
