@@ -11,20 +11,7 @@ import ProfileScreen from "@/screens/profile/ProfileScreen";
 
 const Tab = createBottomTabNavigator();
 
-const resolveScreen = (route) => {
-  switch (route) {
-    case TabRoutes.HOME:
-      return HomeScreen;
-    case TabRoutes.PRODUCTS:
-      return ProductScreen;
-    case TabRoutes.PROFILE:
-      return ProfileScreen;
-    default:
-      return HomeScreen;
-  }
-};
-
-const buildTabScreenOptions = ({ route }) => ({
+const buildTabScreenOptions = (route) => ({
   tabBarIcon: ({ focused, color, size }) => (
     <TabBarIcon
       route={route.name}
@@ -35,37 +22,15 @@ const buildTabScreenOptions = ({ route }) => ({
   ),
   tabBarActiveTintColor: theme.colors.primary,
   tabBarInactiveTintColor: theme.colors.textMuted,
-  tabBarLabelStyle: {
-    fontSize: theme.typography.fontSizeSM,
-    fontWeight: theme.typography.fontWeightSemiBold,
-    marginBottom: 4,
-  },
-  tabBarStyle: {
-    height: theme.tabBar.height,
-    backgroundColor: theme.colors.white,
-    borderTopWidth: 1,
-    borderTopColor: theme.colors.border,
-    paddingTop: 6,
-    elevation: 12,
-    shadowColor: theme.colors.primary,
-    shadowOffset: { width: 0, height: -4 },
-    shadowOpacity: 0.08,
-    shadowRadius: 12,
-  },
-  tabBarItemStyle: {
-    paddingVertical: 2,
-  },
   headerShown: false,
 });
 
-const TAB_ROUTES = [TabRoutes.HOME, TabRoutes.PRODUCTS, TabRoutes.PROFILE];
-
 const MainTabNavigator = () => {
   return (
-    <Tab.Navigator screenOptions={buildTabScreenOptions}>
-      {TAB_ROUTES.map((route) => (
-        <Tab.Screen key={route} name={route} component={resolveScreen(route)} />
-      ))}
+    <Tab.Navigator screenOptions={({ route }) => buildTabScreenOptions(route)}>
+      <Tab.Screen name={TabRoutes.HOME} component={HomeScreen} />
+      <Tab.Screen name={TabRoutes.PRODUCTS} component={ProductScreen} />
+      <Tab.Screen name={TabRoutes.PROFILE} component={ProfileScreen} />
     </Tab.Navigator>
   );
 };
