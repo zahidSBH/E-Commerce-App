@@ -40,8 +40,8 @@ const CartBadgeButton = ({ cartCount = 0, onPress = () => {} }) => {
 
 const styles = StyleSheet.create({
   iconButton: {
-    width: 40,
-    height: 40,
+    width: theme.sizes.iconButton,
+    height: theme.sizes.iconButton,
     borderRadius: theme.borderRadius.full,
     backgroundColor: theme.colors.surface,
     alignItems: "center",
@@ -49,18 +49,18 @@ const styles = StyleSheet.create({
   },
   badge: {
     position: "absolute",
-    top: 4,
-    right: 4,
-    minWidth: 16,
-    height: 16,
+    top: theme.spacing.xs,
+    right: theme.spacing.xs,
+    minWidth: theme.sizes.badge,
+    height: theme.sizes.badge,
     borderRadius: theme.borderRadius.full,
     backgroundColor: theme.colors.primary,
     alignItems: "center",
     justifyContent: "center",
-    paddingHorizontal: 3,
+    paddingHorizontal: theme.spacing.xs,
   },
   badgeText: {
-    fontSize: 9,
+    fontSize: theme.typography.fontSizeXXS,
     color: theme.colors.white,
     fontWeight: theme.typography.fontWeightBold,
   },

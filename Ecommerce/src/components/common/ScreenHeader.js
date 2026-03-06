@@ -27,8 +27,8 @@ const styles = StyleSheet.create({
     paddingVertical: theme.spacing.sm,
   },
   iconButton: {
-    width: 40,
-    height: 40,
+    width: theme.sizes.iconButton,
+    height: theme.sizes.iconButton,
     borderRadius: theme.borderRadius.full,
     backgroundColor: theme.colors.surface,
     alignItems: "center",
