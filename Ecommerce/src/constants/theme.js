@@ -15,6 +15,7 @@ const theme = Object.freeze({
     error: '#D32F2F',
     success: '#388E3C',
   },
+
   typography: {
     fontSizeXS: 10,
     fontSizeSM: 12,
@@ -27,6 +28,7 @@ const theme = Object.freeze({
     fontWeightSemiBold: '600',
     fontWeightBold: '700',
   },
+
   spacing: {
     xs: 4,
     sm: 8,
@@ -35,6 +37,7 @@ const theme = Object.freeze({
     xl: 32,
     xxl: 48,
   },
+
   borderRadius: {
     sm: 4,
     md: 8,
@@ -42,9 +45,39 @@ const theme = Object.freeze({
     xl: 24,
     full: 9999,
   },
+
   tabBar: {
     height: 65,
     iconSize: 22,
+  },
+
+  // NEW — consistent icon sizes
+  iconSizes: {
+    xs: 14,
+    sm: 18,
+    md: 22,
+    lg: 26,
+  },
+
+  // NEW — reusable control sizes
+  sizes: {
+    input: 48,
+    button: 48,
+    iconButton: 40,
+    badge: 16,
+  },
+
+   
+  borderWidth: {
+    hairline: 0.5,
+    sm: 1,
+    md: 2,
+  },
+ 
+  elevation: {
+    sm: 2,
+    md: 4,
+    lg: 8,
   },
 });
 
