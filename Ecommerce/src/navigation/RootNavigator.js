@@ -10,27 +10,19 @@ import {
   setProfile,
 } from "@/store/slices/userSlice";
 import { createUserProfile } from "@/services/userService";
+
 import AuthState from "@/enums/AuthState";
 import AuthNavigator from "@/navigation/AuthNavigator";
-import MainTabNavigator from "@/navigation/MainTabNavigator";
+import MainNavigator from "@/navigation/MainNavigator";
 import theme from "@/constants/theme";
-
-const resolveNavigator = (authState) => {
-  switch (authState) {
-    case AuthState.AUTHENTICATED:
-      return <MainTabNavigator />;
-    case AuthState.UNAUTHENTICATED:
-      return <AuthNavigator />;
-    default:
-      return null;
-  }
-};
 
 const RootNavigator = () => {
   const [authState, setAuthState] = useState(AuthState.LOADING);
   const dispatch = useDispatch();
 
-  const syncUserProfile = async (user) => {
+  const syncUserProfile = async (user = null) => {
+    if (!user?.uid) return;
+
     const result = await dispatch(fetchProfile({ uid: user.uid }));
 
     if (result.meta.requestStatus === "rejected") {
@@ -39,34 +31,42 @@ const RootNavigator = () => {
         fullName: user.displayName ?? "",
         email: user.email ?? "",
       });
+
       if (data) dispatch(setProfile(data));
     }
   };
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
+    const unsubscribe = onAuthStateChanged(auth, async (user) => {
+      console.log("Firebase user:", user);
+
       if (user) {
-        syncUserProfile(user);
+        await syncUserProfile(user);
         setAuthState(AuthState.AUTHENTICATED);
       } else {
         dispatch(clearProfile());
         setAuthState(AuthState.UNAUTHENTICATED);
       }
     });
+
     return unsubscribe;
   }, [dispatch]);
 
-  const Loader = () => (
-    <View style={styles.loaderContainer}>
-      <ActivityIndicator size="large" color={theme.colors.primary} />
-    </View>
-  );
-
   if (authState === AuthState.LOADING) {
-    return <Loader />;
+    return (
+      <View style={styles.loaderContainer}>
+        <ActivityIndicator size="large" color={theme.colors.primary} />
+      </View>
+    );
   }
 
-  return resolveNavigator(authState);
+  console.log("AuthState:", authState);
+
+  return authState === AuthState.AUTHENTICATED ? (
+    <MainNavigator />
+  ) : (
+    <AuthNavigator />
+  );
 };
 
 const styles = StyleSheet.create({
