@@ -1,19 +1,19 @@
 const theme = Object.freeze({
   colors: {
-    primary: '#FF6B00',
-    primaryLight: '#FF8C33',
-    primaryDark: '#CC5500',
-    primaryFaded: '#FFF0E6',
-    background: '#FFFFFF',
-    surface: '#FAFAFA',
-    border: '#F0E8E0',
-    textPrimary: '#1A1A1A',
-    textSecondary: '#6B6B6B',
-    textMuted: '#AAAAAA',
-    white: '#FFFFFF',
-    black: '#000000',
-    error: '#D32F2F',
-    success: '#388E3C',
+    primary: "#FF6B00",
+    primaryLight: "#FF8C33",
+    primaryDark: "#CC5500",
+    primaryFaded: "#FFF0E6",
+    background: "#FFFFFF",
+    surface: "#FAFAFA",
+    border: "#F0E8E0",
+    textPrimary: "#1A1A1A",
+    textSecondary: "#6B6B6B",
+    textMuted: "#AAAAAA",
+    white: "#FFFFFF",
+    black: "#000000",
+    error: "#D32F2F",
+    success: "#388E3C",
   },
 
   typography: {
@@ -23,10 +23,10 @@ const theme = Object.freeze({
     fontSizeLG: 16,
     fontSizeXL: 20,
     fontSizeXXL: 24,
-    fontWeightRegular: '400',
-    fontWeightMedium: '500',
-    fontWeightSemiBold: '600',
-    fontWeightBold: '700',
+    fontWeightRegular: "400",
+    fontWeightMedium: "500",
+    fontWeightSemiBold: "600",
+    fontWeightBold: "700",
   },
 
   spacing: {
@@ -51,7 +51,6 @@ const theme = Object.freeze({
     iconSize: 22,
   },
 
-  // NEW — consistent icon sizes
   iconSizes: {
     xs: 14,
     sm: 18,
@@ -59,21 +58,26 @@ const theme = Object.freeze({
     lg: 26,
   },
 
-  // NEW — reusable control sizes
   sizes: {
     input: 48,
     button: 48,
     iconButton: 40,
     badge: 16,
+    iconCircleXL: 120,
+    iconCircleLG: 96,
+    iconCircleMD: 72,
   },
-
-   
+opacity: {
+  shadow: 0.06,
+  buttonPress: 0.85,
+  disabled: 0.5
+},
   borderWidth: {
     hairline: 0.5,
     sm: 1,
     md: 2,
   },
- 
+
   elevation: {
     sm: 2,
     md: 4,
