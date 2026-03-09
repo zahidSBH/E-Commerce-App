@@ -46,16 +46,19 @@ const ProductScreen = ({ navigation = null, route = {} }) => {
         cartCount={cartCount}
         onCartPress={navigateToCart}
       />
+
       <ProductSearchBar
         value={searchQuery}
         onChangeText={searchProducts}
         onClear={handleClearSearch}
         autoFocus={route.params?.focusSearch ?? false}
       />
+
       <CategoryTabs
         selectedCategory={selectedCategory}
         onCategoryPress={filterByCategory}
       />
+
       <View style={styles.listContainer}>
         <FlashList
           data={filteredProducts}
@@ -85,16 +88,22 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: theme.colors.background,
   },
-  listContainer: {
+
+  listContainer: {paddingLeft: theme.spacing.lg,  
     flex: 1,
   },
+
   listContent: {
     paddingBottom: theme.spacing.xxl,
   },
+
   columnWrapper: {
     paddingHorizontal: theme.spacing.lg,
     gap: theme.spacing.sm,
+    justifyContent: 'space-between',
+     
   },
+
   cardWrapper: {
     flex: 1,
     marginBottom: theme.spacing.sm,
