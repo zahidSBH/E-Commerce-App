@@ -6,8 +6,10 @@ import CartScreen from "@/screens/cart/CartScreen";
 import CheckoutScreen from "@/screens/checkout/CheckoutScreen";
 import OrderPreviewScreen from "@/screens/checkout/OrderPreviewScreen";
 import OrderCompleteScreen from "@/screens/checkout/OrderCompleteScreen";
+import OrdersScreen from "@/screens/profile/OrdersScreen";
 import ProductRoutes from "@/enums/ProductRoutes";
 import CheckoutRoutes from "@/enums/CheckoutRoutes";
+import ProfileRoutes from "@/enums/ProfileRoutes";
 
 const Stack = createNativeStackNavigator();
 
@@ -27,6 +29,10 @@ const MainNavigator = () => (
     <Stack.Screen
       name={CheckoutRoutes.ORDER_COMPLETE}
       component={OrderCompleteScreen}
+    />
+    <Stack.Screen
+      name={ProfileRoutes.ORDER_HISTORY}
+      component={OrdersScreen}
     />
   </Stack.Navigator>
 );

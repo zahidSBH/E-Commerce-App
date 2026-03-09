@@ -13,7 +13,10 @@ const theme = Object.freeze({
     white: "#FFFFFF",
     black: "#000000",
     error: "#D32F2F",
+    errorFaded: "#FFF5F5",
     success: "#388E3C",
+    successFaded: "#E8F5E9",
+    successDark: "#2E7D32",
   },
 
   typography: {
@@ -56,6 +59,7 @@ const theme = Object.freeze({
     sm: 18,
     md: 22,
     lg: 26,
+    xl: 44,
   },
 
   sizes: {
@@ -66,6 +70,9 @@ const theme = Object.freeze({
     iconCircleXL: 120,
     iconCircleLG: 96,
     iconCircleMD: 72,
+    headerBand: 140,
+    avatarOuter: 104,
+    avatarInner: 88,
   },
 opacity: {
   shadow: 0.06,
