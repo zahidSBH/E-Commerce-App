@@ -1,35 +1,63 @@
-import React from "react";
+import React, { useState } from "react";
 import { ScrollView, StyleSheet } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+
 import HomeHeader from "@/components/home/HomeHeader";
-import SearchBar from "@/components/home/SearchBar";
+import ProductSearchBar from "@/components/products/ProductSearchBar";
 import BannerCarousel from "@/components/home/BannerCarousel";
 import CategoryRow from "@/components/home/CategoryRow";
 import FeaturedProducts from "@/components/home/FeaturedProducts";
 import NewArrivals from "@/components/home/NewArrivals";
+
 import useProducts from "@/hooks/useProducts";
 import useUserProfile from "@/hooks/useUserProfile";
+import useCart from "@/hooks/useCart";
+
 import theme from "@/constants/theme";
-import TabRoutes from "@/enums/TabRoutes";
 import ProductRoutes from "@/enums/ProductRoutes";
+import Category from "@/enums/Category";
+import TabRoutes from "@/enums/TabRoutes";
 
 const HomeScreen = ({ navigation = null }) => {
-  const { profile } = useUserProfile();
-  const { featuredProducts, newArrivals, selectedCategory, filterByCategory } =
-    useProducts();
+  const { profile = {} } = useUserProfile();
+  const { featuredProducts = [], newArrivals = [] } = useProducts();
+  const { cartCount = 0 } = useCart();
 
-  const navigateToProduct = (product) => {
+   
+  const [homeCategory, setHomeCategory] = useState(Category.ALL);
+  const [homeSearch, setHomeSearch] = useState("");
+
+  const filterProducts = (products = []) => {
+    let result = products;
+
+    if (homeCategory !== Category.ALL) {
+      result = result.filter((p) => p?.category === homeCategory);
+    }
+
+    if (homeSearch.trim().length > 0) {
+      const q = homeSearch.toLowerCase();
+      result = result.filter(
+        (p) =>
+          p?.name?.toLowerCase().includes(q) ||
+          p?.category?.toLowerCase().includes(q) ||
+          p?.tags?.some((tag) => tag?.toLowerCase().includes(q))
+      );
+    }
+
+    return result;
+  };
+
+  const displayFeatured = filterProducts(featuredProducts);
+  const displayNewArrivals = filterProducts(newArrivals);
+
+  const navigateToProduct = (product = {}) => {
     navigation?.navigate(ProductRoutes.PRODUCT_DETAIL, {
-      productId: product.id,
+      productId: product?.id,
     });
   };
 
   const navigateToProducts = () => {
     navigation?.navigate(TabRoutes.PRODUCTS);
-  };
-
-  const navigateToSearch = () => {
-    navigation?.navigate(TabRoutes.PRODUCTS, { focusSearch: true });
   };
 
   const navigateToCart = () => {
@@ -42,25 +70,35 @@ const HomeScreen = ({ navigation = null }) => {
         style={styles.container}
         contentContainerStyle={styles.content}
         showsVerticalScrollIndicator={false}
+        keyboardShouldPersistTaps="handled"
       >
         <HomeHeader
-          userName={profile.fullName}
-          cartCount={0}
+          userName={profile?.fullName ?? ""}
+          cartCount={cartCount}
           onCartPress={navigateToCart}
         />
-        <SearchBar onPress={navigateToSearch} />
-        <BannerCarousel />
-        <CategoryRow
-          selectedCategory={selectedCategory}
-          onCategoryPress={filterByCategory}
+
+        <ProductSearchBar
+          value={homeSearch}
+          onChangeText={setHomeSearch}
+          onClear={() => setHomeSearch("")}
         />
+
+        <BannerCarousel />
+
+        <CategoryRow
+          selectedCategory={homeCategory}
+          onSelectCategory={setHomeCategory}
+        />
+
         <FeaturedProducts
-          products={featuredProducts}
+          products={displayFeatured}
           onProductPress={navigateToProduct}
           onSeeAllPress={navigateToProducts}
         />
+
         <NewArrivals
-          products={newArrivals}
+          products={displayNewArrivals}
           onProductPress={navigateToProduct}
           onSeeAllPress={navigateToProducts}
         />
@@ -74,9 +112,11 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: theme.colors.background,
   },
+
   container: {
     flex: 1,
   },
+
   content: {
     paddingBottom: theme.spacing.xxl,
   },
