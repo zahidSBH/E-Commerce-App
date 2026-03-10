@@ -1,3 +1,4 @@
+import { useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   setCategory,
@@ -22,20 +23,28 @@ const useProducts = () => {
   const selectedCategory = useSelector(selectSelectedCategory);
   const searchQuery = useSelector(selectSearchQuery);
 
-  const filterByCategory = (category = Category.ALL) => {
-    dispatch(setCategory(category));
-  };
+  const filterByCategory = useCallback(
+    (category = Category.ALL) => {
+      dispatch(setCategory(category));
+    },
+    [dispatch]
+  );
 
-  const searchProducts = (query = "") => {
-    dispatch(setSearchQuery(query));
-  };
+  const searchProducts = useCallback(
+    (query = "") => {
+      dispatch(setSearchQuery(query));
+    },
+    [dispatch]
+  );
 
-  const resetFilters = () => {
+  const resetFilters = useCallback(() => {
     dispatch(clearFilters());
-  };
+  }, [dispatch]);
 
-  const getProductById = (id = "") =>
-    allProducts.find((p) => p.id === id) ?? null;
+  const getProductById = useCallback(
+    (id = "") => allProducts.find((p) => p.id === id) ?? null,
+    [allProducts]
+  );
 
   return {
     allProducts,

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useMemo, useCallback } from "react";
 import { ScrollView, StyleSheet } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
@@ -47,22 +47,32 @@ const HomeScreen = ({ navigation = null }) => {
     return result;
   };
 
-  const displayFeatured = filterProducts(featuredProducts);
-  const displayNewArrivals = filterProducts(newArrivals);
+  const displayFeatured = useMemo(
+    () => filterProducts(featuredProducts),
+    [featuredProducts, homeCategory, homeSearch]
+  );
 
-  const navigateToProduct = (product = {}) => {
-    navigation?.navigate(ProductRoutes.PRODUCT_DETAIL, {
-      productId: product?.id,
-    });
-  };
+  const displayNewArrivals = useMemo(
+    () => filterProducts(newArrivals),
+    [newArrivals, homeCategory, homeSearch]
+  );
 
-  const navigateToProducts = () => {
+  const navigateToProduct = useCallback(
+    (product = {}) => {
+      navigation?.navigate(ProductRoutes.PRODUCT_DETAIL, {
+        productId: product?.id,
+      });
+    },
+    [navigation]
+  );
+
+  const navigateToProducts = useCallback(() => {
     navigation?.navigate(TabRoutes.PRODUCTS);
-  };
+  }, [navigation]);
 
-  const navigateToCart = () => {
+  const navigateToCart = useCallback(() => {
     navigation?.navigate(ProductRoutes.CART);
-  };
+  }, [navigation]);
 
   return (
     <SafeAreaView style={styles.safeArea} edges={["top"]}>

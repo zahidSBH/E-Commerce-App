@@ -1,3 +1,4 @@
+import { useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import {
   fetchProfile,
@@ -19,17 +20,23 @@ const useUserProfile = () => {
   const uid = useSelector(selectUserUid);
   const isProfileLoaded = useSelector(selectIsProfileLoaded);
 
-  const loadProfile = (targetUid = '') => {
-    dispatch(fetchProfile({ uid: targetUid }));
-  };
- 
-  const saveProfile = (payload = {}) => {
-    dispatch(updateProfile({ uid, payload }));
-  };
+  const loadProfile = useCallback(
+    (targetUid = "") => {
+      dispatch(fetchProfile({ uid: targetUid }));
+    },
+    [dispatch]
+  );
 
-  const resetProfile = () => {
+  const saveProfile = useCallback(
+    (payload = {}) => {
+      dispatch(updateProfile({ uid, payload }));
+    },
+    [dispatch, uid]
+  );
+
+  const resetProfile = useCallback(() => {
     dispatch(clearProfile());
-  };
+  }, [dispatch]);
 
   return {
     profile,

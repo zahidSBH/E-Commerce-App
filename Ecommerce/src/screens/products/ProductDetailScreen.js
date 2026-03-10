@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
 import { View, Text, Image, ScrollView, StyleSheet, Dimensions } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
@@ -48,8 +48,9 @@ const ProductDetailScreen = ({ navigation = null, route = {} }) => {
     else setQuantity((q) => Math.max(1, q - 1));
   };
 
-  const RightComponent = () => (
-    <CartBadgeButton cartCount={cartCount} onPress={navigateToCart} />
+  const RightComponent = useMemo(
+    () => () => <CartBadgeButton cartCount={cartCount} onPress={navigateToCart} />,
+    [cartCount, navigateToCart]
   );
 
   if (!product) {

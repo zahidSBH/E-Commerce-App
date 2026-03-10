@@ -1,3 +1,4 @@
+import { useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   addToCart,
@@ -21,25 +22,37 @@ const useCart = (productId = "") => {
   const isInCart = useSelector(selectIsInCart(productId));
   const cartItem = useSelector(selectCartItemByProductId(productId));
 
-  const addItem = (product = {}) => {
-    dispatch(addToCart(product));
-  };
+  const addItem = useCallback(
+    (product = {}) => {
+      dispatch(addToCart(product));
+    },
+    [dispatch]
+  );
 
-  const removeItem = (id = "") => {
-    dispatch(removeFromCart(id));
-  };
+  const removeItem = useCallback(
+    (id = "") => {
+      dispatch(removeFromCart(id));
+    },
+    [dispatch]
+  );
 
-  const increment = (id = "") => {
-    dispatch(incrementQuantity(id));
-  };
+  const increment = useCallback(
+    (id = "") => {
+      dispatch(incrementQuantity(id));
+    },
+    [dispatch]
+  );
 
-  const decrement = (id = "") => {
-    dispatch(decrementQuantity(id));
-  };
+  const decrement = useCallback(
+    (id = "") => {
+      dispatch(decrementQuantity(id));
+    },
+    [dispatch]
+  );
 
-  const emptyCart = () => {
+  const emptyCart = useCallback(() => {
     dispatch(clearCart());
-  };
+  }, [dispatch]);
 
   return {
     cartItems,

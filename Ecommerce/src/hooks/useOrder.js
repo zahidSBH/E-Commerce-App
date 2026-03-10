@@ -1,3 +1,4 @@
+import { useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 import {
@@ -39,23 +40,35 @@ const useOrder = () => {
   const deliveryFee = calculateDeliveryFee(subtotal);
   const total = subtotal + deliveryFee;
 
-  const saveAddress = (data = {}) => {
-    dispatch(setAddress(data));
-  };
+  const saveAddress = useCallback(
+    (data = {}) => {
+      dispatch(setAddress(data));
+    },
+    [dispatch]
+  );
 
-  const selectPayment = (method = "") => {
-    dispatch(setPaymentMethod(method));
-  };
+  const selectPayment = useCallback(
+    (method = "") => {
+      dispatch(setPaymentMethod(method));
+    },
+    [dispatch]
+  );
 
-  const saveTransactionId = (id = "") => {
-    dispatch(setTransactionId(id));
-  };
+  const saveTransactionId = useCallback(
+    (id = "") => {
+      dispatch(setTransactionId(id));
+    },
+    [dispatch]
+  );
 
-  const loadOrderHistory = (targetUid = "") => {
-    dispatch(fetchOrdersHistory({ uid: targetUid || uid }));
-  };
+  const loadOrderHistory = useCallback(
+    (targetUid = "") => {
+      dispatch(fetchOrdersHistory({ uid: targetUid || uid }));
+    },
+    [dispatch, uid]
+  );
 
-  const submitOrder = async () => {
+  const submitOrder = useCallback(async () => {
     const orderData = createOrderModel({
       items: cartItems,
       address,
@@ -67,11 +80,21 @@ const useOrder = () => {
     });
 
     return await dispatch(savePlacedOrder({ uid, orderData }));
-  };
+  }, [
+    dispatch,
+    uid,
+    cartItems,
+    address,
+    paymentMethod,
+    transactionId,
+    subtotal,
+    deliveryFee,
+    total,
+  ]);
 
-  const resetOrder = () => {
+  const resetOrder = useCallback(() => {
     dispatch(clearOrder());
-  };
+  }, [dispatch]);
 
   return {
     address,
