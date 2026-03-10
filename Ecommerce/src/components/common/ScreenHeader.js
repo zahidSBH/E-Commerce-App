@@ -1,9 +1,12 @@
-import React from "react";
-import { View, TouchableOpacity, StyleSheet } from "react-native";
+import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import theme from "@/constants/theme";
 
-const ScreenHeader = ({ onBackPress = () => {}, RightComponent = null }) => {
+const ScreenHeader = ({
+  title = "",
+  onBackPress = () => {},
+  RightComponent = null,
+}) => {
   return (
     <View style={styles.container}>
       <TouchableOpacity style={styles.iconButton} onPress={onBackPress}>
@@ -13,7 +16,12 @@ const ScreenHeader = ({ onBackPress = () => {}, RightComponent = null }) => {
           color={theme.colors.textPrimary}
         />
       </TouchableOpacity>
-      {RightComponent && <RightComponent />}
+
+      {title ? <Text style={styles.title}>{title}</Text> : null}
+
+      <View style={styles.rightSide}>
+        {RightComponent ? <RightComponent /> : <View style={styles.placeholder} />}
+      </View>
     </View>
   );
 };
@@ -25,6 +33,20 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     paddingHorizontal: theme.spacing.md,
     paddingVertical: theme.spacing.sm,
+    height: 56,
+  },
+  title: {
+    fontSize: theme.typography.fontSizeLG,
+    fontWeight: theme.typography.fontWeightBold,
+    color: theme.colors.textPrimary,
+  },
+  rightSide: {
+    width: theme.sizes.iconButton,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  placeholder: {
+    width: theme.sizes.iconButton,
   },
   iconButton: {
     width: theme.sizes.iconButton,

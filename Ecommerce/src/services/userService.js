@@ -7,6 +7,7 @@ import {
 } from "firebase/firestore";
 import { db } from "@/config/firebase";
 import createUserModel from "@/models/userModel";
+import { convertTimestamp } from "@/utils/serializationHelpers";
 
 const USERS_COLLECTION = "users";
 
@@ -24,19 +25,38 @@ const createUserProfile = async ({
     const existingUser = await getDoc(userRef);
 
     if (existingUser.exists()) {
-      return { data: createUserModel(existingUser.data()), error: null };
+      const data = existingUser.data() || {};
+      return {
+        data: createUserModel({
+          ...data,
+          createdAt: convertTimestamp(data.createdAt),
+          updatedAt: convertTimestamp(data.updatedAt),
+        }),
+        error: null,
+      };
     }
 
+    const now = new Date().toISOString();
     const userProfile = createUserModel({
       uid,
       fullName,
       email,
       avatarUrl: null,
-      createdAt: serverTimestamp(),
-      updatedAt: serverTimestamp(),
+      createdAt: now,
+      updatedAt: now,
     });
 
-    await setDoc(userRef, userProfile);
+    const firestoreData = {
+      uid,
+      fullName,
+      email,
+      avatarUrl: null,
+      role: userProfile.role,
+      createdAt: serverTimestamp(),
+      updatedAt: serverTimestamp(),
+    };
+
+    await setDoc(userRef, firestoreData);
 
     return { data: userProfile, error: null };
   } catch (err) {
@@ -58,7 +78,15 @@ const fetchUserProfile = async ({ uid = "" } = {}) => {
       return { data: null, error: "User profile not found." };
     }
 
-    return { data: createUserModel(userSnap.data()), error: null };
+    const data = userSnap.data() || {};
+    return {
+      data: createUserModel({
+        ...data,
+        createdAt: convertTimestamp(data.createdAt),
+        updatedAt: convertTimestamp(data.updatedAt),
+      }),
+      error: null,
+    };
   } catch (err) {
     console.error("Fetch user profile error:", err);
     return { data: null, error: "Failed to fetch user profile." };

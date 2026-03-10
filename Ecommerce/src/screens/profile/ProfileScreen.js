@@ -1,55 +1,34 @@
-import React from "react";
+import React, { useEffect, useCallback } from "react";
 import { View, Text, StyleSheet } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
+import { useNavigation } from "@react-navigation/native";
+
 import useUserProfile from "@/hooks/useUserProfile";
+import useAuth from "@/hooks/useAuth";
+import useOrder from "@/hooks/useOrder";
+
+import Avatar from "@/components/profile/Avatar";
+import StatItem from "@/components/profile/StatItem";
+import LogoutButton from "@/components/profile/LogoutButton";
+
 import theme from "@/constants/theme";
+import ProfileRoutes from "@/enums/ProfileRoutes";
 
 const ProfileScreen = () => {
-  const { profile, isProfileLoaded } = useUserProfile();
+  const navigation = useNavigation();
+  const { profile, isProfileLoaded, uid } = useUserProfile();
+  const { logout, loading } = useAuth();
+  const { orderHistory, loadOrderHistory } = useOrder();
 
-  const Avatar = () => (
-    <View style={styles.avatarWrapper}>
-      <View style={styles.avatarRing}>
-        <View style={styles.avatarInner}>
-          <Ionicons name="person" size={44} color={theme.colors.primary} />
-        </View>
-      </View>
-    </View>
-  );
+  useEffect(() => {
+    if (uid) {
+      loadOrderHistory(uid);
+    }
+  }, [uid, loadOrderHistory]);
 
-  const ProfileInfo = () => (
-    <View style={styles.infoContainer}>
-      <Text style={styles.name}>{profile.fullName}</Text>
-      <View style={styles.emailRow}>
-        <Ionicons
-          name="mail-outline"
-          size={14}
-          color={theme.colors.textMuted}
-        />
-        <Text style={styles.email}>{profile.email}</Text>
-      </View>
-    </View>
-  );
-
-  const Divider = () => <View style={styles.divider} />;
-
-  const StatItem = ({ icon = "cube-outline", label = "", value = "0" }) => (
-    <View style={styles.statItem}>
-      <Ionicons name={icon} size={20} color={theme.colors.primary} />
-      <Text style={styles.statValue}>{value}</Text>
-      <Text style={styles.statLabel}>{label}</Text>
-    </View>
-  );
-
-  const StatsRow = () => (
-    <View style={styles.statsRow}>
-      <StatItem icon="bag-handle-outline" label="Orders" value="0" />
-      <View style={styles.statDivider} />
-      <StatItem icon="heart-outline" label="Wishlist" value="0" />
-      <View style={styles.statDivider} />
-      <StatItem icon="star-outline" label="Reviews" value="0" />
-    </View>
-  );
+  const navigateToOrders = useCallback(() => {
+    navigation.navigate(ProfileRoutes.ORDER_HISTORY);
+  }, [navigation]);
 
   const NotLoaded = () => (
     <View style={styles.center}>
@@ -61,14 +40,44 @@ const ProfileScreen = () => {
     return <NotLoaded />;
   }
 
+  const orderCount = orderHistory.length.toString();
+
   return (
     <View style={styles.container}>
       <View style={styles.headerBand} />
       <View style={styles.card}>
         <Avatar />
-        <ProfileInfo />
-        <Divider />
-        <StatsRow />
+        
+        <View style={styles.infoContainer}>
+          <Text style={styles.name}>{profile?.fullName ?? ""}</Text>
+          <View style={styles.emailRow}>
+            <Ionicons
+              name="mail-outline"
+              size={theme.iconSizes.xs}
+              color={theme.colors.textMuted}
+            />
+            <Text style={styles.email}>{profile?.email ?? ""}</Text>
+          </View>
+        </View>
+
+        <View style={styles.divider} />
+
+        <View style={styles.statsRow}>
+          <StatItem
+            icon="bag-handle-outline"
+            label="Orders"
+            value={orderCount}
+            onPress={navigateToOrders}
+          />
+          <View style={styles.statDivider} />
+          <StatItem icon="heart-outline" label="Wishlist" value="0" />
+          <View style={styles.statDivider} />
+          <StatItem icon="star-outline" label="Reviews" value="0" />
+        </View>
+
+        <View style={styles.divider} />
+        
+        <LogoutButton onPress={logout} loading={loading} />
       </View>
     </View>
   );
@@ -86,7 +95,7 @@ const styles = StyleSheet.create({
     backgroundColor: theme.colors.background,
   },
   headerBand: {
-    height: 140,
+    height: theme.sizes.headerBand,
     backgroundColor: theme.colors.primary,
     borderBottomLeftRadius: 32,
     borderBottomRightRadius: 32,
@@ -105,32 +114,6 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.08,
     shadowRadius: 16,
     elevation: 6,
-  },
-  avatarWrapper: {
-    position: "absolute",
-    top: -50,
-    alignSelf: "center",
-  },
-  avatarRing: {
-    width: 104,
-    height: 104,
-    borderRadius: theme.borderRadius.full,
-    backgroundColor: theme.colors.white,
-    alignItems: "center",
-    justifyContent: "center",
-    shadowColor: theme.colors.primary,
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.2,
-    shadowRadius: 12,
-    elevation: 8,
-  },
-  avatarInner: {
-    width: 88,
-    height: 88,
-    borderRadius: theme.borderRadius.full,
-    backgroundColor: theme.colors.primaryFaded,
-    alignItems: "center",
-    justifyContent: "center",
   },
   infoContainer: {
     alignItems: "center",
@@ -164,26 +147,11 @@ const styles = StyleSheet.create({
     width: "100%",
     justifyContent: "space-around",
     alignItems: "center",
-  },
-  statItem: {
-    alignItems: "center",
-    gap: theme.spacing.xs,
-    flex: 1,
-  },
-  statValue: {
-    fontSize: theme.typography.fontSizeLG,
-    fontWeight: theme.typography.fontWeightBold,
-    color: theme.colors.textPrimary,
-  },
-  statLabel: {
-    fontSize: theme.typography.fontSizeXS,
-    color: theme.colors.textMuted,
-    textTransform: "uppercase",
-    letterSpacing: 0.8,
+    marginBottom: theme.spacing.lg,
   },
   statDivider: {
     width: 1,
-    height: 40,
+    height: theme.sizes.iconButton,
     backgroundColor: theme.colors.border,
   },
 });

@@ -1,8 +1,11 @@
+import UserRole from "@/enums/UserRole";
+
 const DEFAULT_USER_MODEL = Object.freeze({
   uid: "",
   fullName: "",
   email: "",
   avatarUrl: null,
+  role: UserRole.USER,
   createdAt: null,
   updatedAt: null,
 });

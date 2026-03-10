@@ -1,4 +1,4 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, createSelector } from "@reduxjs/toolkit";
 import createCartItemModel from "@/models/cartModel";
 import { findByProductId, removeByProductId } from "@/utils/cartHelpers";
 
@@ -60,20 +60,24 @@ const cartSlice = createSlice({
 
 const selectCartItems = (state) => state.cart.items;
 
-const selectCartCount = (state) =>
-  state.cart.items.reduce((total, item) => total + item.quantity, 0);
+const selectCartCount = createSelector([selectCartItems], (items) =>
+  items.reduce((total, item) => total + item.quantity, 0)
+);
 
-const selectCartTotal = (state) =>
-  state.cart.items.reduce(
-    (total, item) => total + item.price * item.quantity,
-    0,
+const selectCartTotal = createSelector([selectCartItems], (items) =>
+  items.reduce((total, item) => total + item.price * item.quantity, 0)
+);
+
+const selectIsInCart = (productId) =>
+  createSelector([selectCartItems], (items) =>
+    items.some((item) => item.productId === productId)
   );
 
-const selectIsInCart = (productId) => (state) =>
-  state.cart.items.some((item) => item.productId === productId);
-
-const selectCartItemByProductId = (productId) => (state) =>
-  findByProductId(state.cart.items, productId) ?? null;
+const selectCartItemByProductId = (productId) =>
+  createSelector(
+    [selectCartItems],
+    (items) => findByProductId(items, productId) ?? null
+  );
 
 export const {
   addToCart,
