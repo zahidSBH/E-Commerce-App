@@ -25,7 +25,7 @@ const createUserProfile = async ({
     const existingUser = await getDoc(userRef);
 
     if (existingUser.exists()) {
-      const data = existingUser.data();
+      const data = existingUser.data() || {};
       return {
         data: createUserModel({
           ...data,
@@ -37,15 +37,6 @@ const createUserProfile = async ({
     }
 
     const now = new Date().toISOString();
-    const firestoreData = {
-      uid,
-      fullName,
-      email,
-      avatarUrl: null,
-      createdAt: serverTimestamp(),
-      updatedAt: serverTimestamp(),
-    };
-
     const userProfile = createUserModel({
       uid,
       fullName,
@@ -54,6 +45,16 @@ const createUserProfile = async ({
       createdAt: now,
       updatedAt: now,
     });
+
+    const firestoreData = {
+      uid,
+      fullName,
+      email,
+      avatarUrl: null,
+      role: userProfile.role,
+      createdAt: serverTimestamp(),
+      updatedAt: serverTimestamp(),
+    };
 
     await setDoc(userRef, firestoreData);
 
@@ -73,7 +74,11 @@ const fetchUserProfile = async ({ uid = "" } = {}) => {
     const userRef = doc(db, USERS_COLLECTION, uid);
     const userSnap = await getDoc(userRef);
 
-    const data = userSnap.data();
+    if (!userSnap.exists()) {
+      return { data: null, error: "User profile not found." };
+    }
+
+    const data = userSnap.data() || {};
     return {
       data: createUserModel({
         ...data,

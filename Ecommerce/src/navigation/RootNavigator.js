@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { View, ActivityIndicator, StyleSheet } from "react-native";
 import { onAuthStateChanged } from "firebase/auth";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 import { auth } from "@/config/firebase";
 import {
@@ -12,9 +12,12 @@ import {
 import { createUserProfile } from "@/services/userService";
 
 import AuthState from "@/enums/AuthState";
+import UserRole from "@/enums/UserRole";
 import AuthNavigator from "@/navigation/AuthNavigator";
 import MainNavigator from "@/navigation/MainNavigator";
+import AdminNavigator from "@/navigation/AdminNavigator";
 import theme from "@/constants/theme";
+import { selectUserProfile } from "@/store/slices/userSlice";
 
 const RootNavigator = () => {
   const [authState, setAuthState] = useState(AuthState.LOADING);
@@ -52,6 +55,8 @@ const RootNavigator = () => {
     return unsubscribe;
   }, [dispatch]);
 
+  const profile = useSelector(selectUserProfile);
+
   if (authState === AuthState.LOADING) {
     return (
       <View style={styles.loaderContainer}>
@@ -60,13 +65,15 @@ const RootNavigator = () => {
     );
   }
 
-  console.log("AuthState:", authState);
+  if (authState === AuthState.AUTHENTICATED) {
+    return profile?.role === UserRole.ADMIN ? (
+      <AdminNavigator />
+    ) : (
+      <MainNavigator />
+    );
+  }
 
-  return authState === AuthState.AUTHENTICATED ? (
-    <MainNavigator />
-  ) : (
-    <AuthNavigator />
-  );
+  return <AuthNavigator />;
 };
 
 const styles = StyleSheet.create({
