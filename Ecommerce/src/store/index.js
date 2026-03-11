@@ -20,8 +20,16 @@ const store = configureStore({
         ignoredActions: [
           fetchProfile.fulfilled.type,
           updateProfile.fulfilled.type,
+          "product/fetchProducts/fulfilled",
+          "product/addProduct/fulfilled",
+          "product/updateProduct/fulfilled",
         ],
-        ignoredPaths: ["user.profile.createdAt", "user.profile.updatedAt"],
+        ignoredPaths: [
+          "user.profile.createdAt",
+          "user.profile.updatedAt",
+          "product.all.createdAt",
+          "product.all.updatedAt",
+        ],
       },
     }),
 });

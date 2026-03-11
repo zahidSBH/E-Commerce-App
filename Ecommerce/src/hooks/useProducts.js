@@ -4,6 +4,7 @@ import {
   setCategory,
   setSearchQuery,
   clearFilters,
+  fetchProducts,
   selectAllProducts,
   selectFeaturedProducts,
   selectNewArrivals,
@@ -46,6 +47,10 @@ const useProducts = () => {
     [allProducts]
   );
 
+  const loadProducts = useCallback(() => {
+    dispatch(fetchProducts());
+  }, [dispatch]);
+
   return {
     allProducts,
     featuredProducts,
@@ -57,6 +62,7 @@ const useProducts = () => {
     searchProducts,
     resetFilters,
     getProductById,
+    loadProducts,
   };
 };
 
