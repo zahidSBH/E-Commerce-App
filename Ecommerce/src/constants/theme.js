@@ -1,6 +1,7 @@
 const theme = Object.freeze({
   colors: {
     primary: "#FF6B00",
+    primary20: "#cf7432ff",
     primaryLight: "#FF8C33",
     primaryDark: "#CC5500",
     primaryFaded: "#FFF0E6",
@@ -13,8 +14,10 @@ const theme = Object.freeze({
     white: "#FFFFFF",
     black: "#000000",
     error: "#D32F2F",
+    error20: "#8d2222ff",
     errorFaded: "#FFF5F5",
     success: "#388E3C",
+    success20: "#275f30ff",
     successFaded: "#E8F5E9",
     successDark: "#2E7D32",
     info: "#2196F3",

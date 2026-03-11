@@ -7,11 +7,11 @@ import formatDate from "@/utils/formatDate";
 const getStatusColor = (status) => {
   switch (status) {
     case OrderStatus.DELIVERED:
-      return { text: theme.colors.success, bg: theme.colors.success + "20" };
+      return { text: theme.colors.success, bg: theme.colors.success20 };
     case OrderStatus.CANCELLED:
-      return { text: theme.colors.error, bg: theme.colors.error + "20" };
+      return { text: theme.colors.error, bg: theme.colors.error20 };
     case OrderStatus.SHIPPED:
-      return { text: theme.colors.primary, bg: theme.colors.primary + "20" };
+      return { text: theme.colors.primary, bg: theme.colors.primary20 };
     case OrderStatus.PROCESSING:
       return { text: theme.colors.info, bg: theme.colors.infoFaded };
     default:
