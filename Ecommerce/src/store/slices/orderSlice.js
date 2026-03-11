@@ -1,7 +1,12 @@
 import { createSlice, createAsyncThunk, isAnyOf } from "@reduxjs/toolkit";
 import createOrderModel from "@/models/orderModel";
 import PaymentMethod from "@/enums/PaymentMethod";
-import { saveOrder, fetchOrders } from "@/services/orderService";
+import {
+  saveOrder,
+  fetchOrders,
+  fetchAllOrders,
+  updateOrderStatus,
+} from "@/services/orderService";
 import SliceStatus from "@/enums/SliceStatus";
 
 const initialState = {
@@ -18,12 +23,31 @@ const initialState = {
   },
   paymentMethod: PaymentMethod.CASH_ON_DELIVERY,
   transactionId: "",
+  adminOrders: [],
 };
 
 const fetchOrdersHistory = createAsyncThunk(
   "order/fetchHistory",
   async ({ uid }, { rejectWithValue }) => {
     const { data, error } = await fetchOrders({ uid });
+    if (error) return rejectWithValue(error);
+    return data;
+  },
+);
+
+const fetchAllAdminOrders = createAsyncThunk(
+  "order/fetchAllAdminOrders",
+  async (_, { rejectWithValue }) => {
+    const { data, error } = await fetchAllOrders();
+    if (error) return rejectWithValue(error);
+    return data;
+  },
+);
+
+const updateOrder = createAsyncThunk(
+  "order/updateOrder",
+  async ({ orderId, status }, { rejectWithValue }) => {
+    const { data, error } = await updateOrderStatus(orderId, status);
     if (error) return rejectWithValue(error);
     return data;
   },
@@ -100,15 +124,53 @@ const orderSlice = createSlice({
         state.history = [action.payload, ...state.history];
         state.currentOrder = action.payload;
       })
+      .addCase(fetchAllAdminOrders.fulfilled, (state, action) => {
+        state.status = SliceStatus.SUCCEEDED;
+        state.adminOrders = action.payload;
+      })
+      .addCase(updateOrder.fulfilled, (state, action) => {
+        state.status = SliceStatus.SUCCEEDED;
+
+      
+        const adminIndex = state.adminOrders.findIndex(
+          (o) => o.id === action.payload.id,
+        );
+        if (adminIndex !== -1) {
+          state.adminOrders[adminIndex] = {
+            ...state.adminOrders[adminIndex],
+            ...action.payload,
+          };
+        }
+ 
+        const historyIndex = state.history.findIndex(
+          (o) => o.id === action.payload.id,
+        );
+        if (historyIndex !== -1) {
+          state.history[historyIndex] = {
+            ...state.history[historyIndex],
+            ...action.payload,
+          };
+        }
+      })
       .addMatcher(
-        isAnyOf(fetchOrdersHistory.pending, savePlacedOrder.pending),
+        isAnyOf(
+          fetchOrdersHistory.pending,
+          savePlacedOrder.pending,
+          fetchAllAdminOrders.pending,
+          updateOrder.pending,
+        ),
         (state) => {
           state.status = SliceStatus.LOADING;
           state.error = null;
         },
       )
       .addMatcher(
-        isAnyOf(fetchOrdersHistory.rejected, savePlacedOrder.rejected),
+        isAnyOf(
+          fetchOrdersHistory.rejected,
+          savePlacedOrder.rejected,
+          fetchAllAdminOrders.rejected,
+          updateOrder.rejected,
+        ),
         (state, action) => {
           state.status = SliceStatus.FAILED;
           state.error = action.payload;
@@ -123,6 +185,9 @@ const selectTransactionId = (state) => state.order.transactionId;
 const selectCurrentOrder = (state) => state.order.currentOrder;
 const selectOrderHistory = (state) => state.order.history;
 const selectOrderStatus = (state) => state.order.status;
+const selectAdminOrders = (state) => state.order.adminOrders;
+const selectOrderById = (orderId) => (state) =>
+  state.order.adminOrders.find((o) => o.id === orderId);
 
 export const {
   setAddress,
@@ -141,7 +206,11 @@ export {
   selectCurrentOrder,
   selectOrderHistory,
   selectOrderStatus,
+  selectAdminOrders,
+  selectOrderById,
   fetchOrdersHistory,
+  fetchAllAdminOrders,
+  updateOrder,
   savePlacedOrder,
 };
 

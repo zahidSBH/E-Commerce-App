@@ -1,21 +1,51 @@
 import React from "react";
 import { View, Text, StyleSheet } from "react-native";
 import theme from "@/constants/theme";
+import OrderStatus from "@/enums/OrderStatus";
+import formatDate from "@/utils/formatDate";
+
+const getStatusColor = (status) => {
+  switch (status) {
+    case OrderStatus.DELIVERED:
+      return { text: theme.colors.successDark, bg: theme.colors.successFaded };
+    case OrderStatus.CANCELLED:
+      return { text: theme.colors.error, bg: theme.colors.errorFaded };
+    case OrderStatus.SHIPPED:
+      return { text: theme.colors.primary, bg: theme.colors.primaryFaded };
+    case OrderStatus.PROCESSING:
+      return { text: theme.colors.info, bg: theme.colors.infoFaded };
+    default:
+      return { text: theme.colors.textSecondary, bg: theme.colors.surface };
+  }
+};
 
 const OrderItem = ({ item = {} }) => {
-  const itemCountText = `${item.items?.length || 0} ${item.items?.length === 1 ? "item" : "items"}`;
-  const totalAmount = (item.total || 0).toFixed(2);
-  const formattedDate = item.placedAt ? new Date(item.placedAt).toLocaleDateString() : "";
+  const {
+    invoiceNumber,
+    status,
+    placedAt,
+    items,
+    total,
+  } = item ?? {};
+
+  const itemsCount = (items ?? []).length;
+  const itemCountText = `${itemsCount} ${itemsCount === 1 ? "item" : "items"}`;
+  const totalAmount = (total ?? 0).toFixed(2);
+  const formattedDate = formatDate(placedAt);
+
+  const statusStyle = getStatusColor(status);
 
   return (
     <View style={styles.card}>
       <View style={styles.header}>
         <View>
-          <Text style={styles.invoiceNo}>{item.invoiceNumber}</Text>
+          <Text style={styles.invoiceNo}>{invoiceNumber ?? "N/A"}</Text>
           <Text style={styles.date}>{formattedDate}</Text>
         </View>
-        <View style={styles.statusBadge}>
-          <Text style={styles.statusText}>Completed</Text>
+        <View style={[styles.statusBadge, { backgroundColor: statusStyle.bg }]}>
+          <Text style={[styles.statusText, { color: statusStyle.text }]}>
+            {status ?? "Pending"}
+          </Text>
         </View>
       </View>
 
@@ -60,14 +90,12 @@ const styles = StyleSheet.create({
     marginTop: 2,
   },
   statusBadge: {
-    backgroundColor: theme.colors.successFaded,
     paddingHorizontal: 8,
     paddingVertical: 4,
     borderRadius: 4,
   },
   statusText: {
     fontSize: 10,
-    color: theme.colors.successDark,
     fontWeight: theme.typography.fontWeightBold,
     textTransform: "uppercase",
   },
@@ -92,4 +120,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default OrderItem;
+export default React.memo(OrderItem);
