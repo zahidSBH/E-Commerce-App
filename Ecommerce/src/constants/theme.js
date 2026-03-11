@@ -17,6 +17,9 @@ const theme = Object.freeze({
     success: "#388E3C",
     successFaded: "#E8F5E9",
     successDark: "#2E7D32",
+    info: "#2196F3",
+    infoFaded: "#E3F2FD",
+    modalOverlay: "rgba(0, 0, 0, 0.5)",
   },
 
   typography: {
@@ -89,6 +92,22 @@ opacity: {
     sm: 2,
     md: 4,
     lg: 8,
+  },
+  shadows: {
+    modal: {
+      shadowColor: "#000000",
+      shadowOffset: { width: 0, height: 4 },
+      shadowOpacity: 0.15,
+      shadowRadius: 12,
+      elevation: 8,
+    },
+    card: {
+      shadowColor: "#000000",
+      shadowOffset: { width: 0, height: 2 },
+      shadowOpacity: 0.05,
+      shadowRadius: 8,
+      elevation: 2,
+    },
   },
 });
 

@@ -41,8 +41,6 @@ const RootNavigator = () => {
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
-      console.log("Firebase user:", user);
-
       if (user) {
         await syncUserProfile(user);
         setAuthState(AuthState.AUTHENTICATED);

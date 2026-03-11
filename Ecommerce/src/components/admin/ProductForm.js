@@ -19,13 +19,13 @@ const ProductForm = ({
     formState: { errors },
   } = useForm({
     defaultValues: {
-      name: initialValues.name || "",
-      description: initialValues.description || "",
-      price: String(initialValues.price || ""),
-      category: initialValues.category || Category.ELECTRONICS,
-      imageUrl: initialValues.imageUrl || "",
-      isFeatured: initialValues.isFeatured || false,
-      isNew: initialValues.isNew || false,
+      name: initialValues.name ?? "",
+      description: initialValues.description ?? "",
+      price: String(initialValues.price ?? ""),
+      category: initialValues.category ?? Category.ELECTRONICS,
+      imageUrl: initialValues.imageUrl ?? "",
+      isFeatured: initialValues.isFeatured ?? false,
+      isNew: initialValues.isNew ?? false,
     },
   });
 
