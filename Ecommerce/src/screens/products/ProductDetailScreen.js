@@ -67,7 +67,7 @@ const ProductDetailScreen = ({ navigation = null, route = {} }) => {
   const safeOriginalPrice = product?.originalPrice ?? 0;
 
   return (
-    <SafeAreaView style={styles.safeArea} edges={["top"]}>
+    <SafeAreaView style={styles.safeArea} edges={["top", "bottom"]}>
       <ScreenHeader
         onBackPress={() => navigation?.goBack()}
         RightComponent={RightComponent}

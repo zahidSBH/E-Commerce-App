@@ -1,6 +1,7 @@
 const theme = Object.freeze({
   colors: {
     primary: "#FF6B00",
+    primary20: "#cf7432ff",
     primaryLight: "#FF8C33",
     primaryDark: "#CC5500",
     primaryFaded: "#FFF0E6",
@@ -13,10 +14,15 @@ const theme = Object.freeze({
     white: "#FFFFFF",
     black: "#000000",
     error: "#D32F2F",
+    error20: "#8d2222ff",
     errorFaded: "#FFF5F5",
     success: "#388E3C",
+    success20: "#275f30ff",
     successFaded: "#E8F5E9",
     successDark: "#2E7D32",
+    info: "#2196F3",
+    infoFaded: "#E3F2FD",
+    modalOverlay: "rgba(0, 0, 0, 0.5)",
   },
 
   typography: {
@@ -89,6 +95,22 @@ opacity: {
     sm: 2,
     md: 4,
     lg: 8,
+  },
+  shadows: {
+    modal: {
+      shadowColor: "#000000",
+      shadowOffset: { width: 0, height: 4 },
+      shadowOpacity: 0.15,
+      shadowRadius: 12,
+      elevation: 8,
+    },
+    card: {
+      shadowColor: "#000000",
+      shadowOffset: { width: 0, height: 2 },
+      shadowOpacity: 0.05,
+      shadowRadius: 8,
+      elevation: 2,
+    },
   },
 });
 

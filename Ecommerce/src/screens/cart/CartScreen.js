@@ -50,7 +50,7 @@ const CartScreen = ({ navigation = null }) => {
   );
 
   return (
-    <SafeAreaView style={styles.safeArea} edges={['top']}>
+    <SafeAreaView style={styles.safeArea} edges={['top', 'bottom']}>
       <ScreenHeader
         onBackPress={handleBack}
         title="My Cart"

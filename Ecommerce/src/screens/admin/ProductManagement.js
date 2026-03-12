@@ -1,13 +1,38 @@
-import React from "react";
-import { View, Text, StyleSheet, FlatList, TouchableOpacity } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  FlatList,
+  TouchableOpacity,
+  Alert,
+} from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Ionicons } from "@expo/vector-icons";
+import { useDispatch } from "react-redux";
 import theme from "@/constants/theme";
 import useProducts from "@/hooks/useProducts";
+import { deleteProduct } from "@/store/slices/productSlice";
+import AdminRoutes from "@/enums/AdminRoutes";
 import ScreenHeader from "@/components/common/ScreenHeader";
 
 const ProductManagement = ({ navigation }) => {
+  const dispatch = useDispatch();
   const { allProducts } = useProducts();
+
+  const handleDelete = (id) => {
+    Alert.alert(
+      "Delete Product",
+      "Are you sure you want to delete this product?",
+      [
+        { text: "Cancel", style: "cancel" },
+        {
+          text: "Delete",
+          style: "destructive",
+          onPress: () => dispatch(deleteProduct(id)),
+        },
+      ]
+    );
+  };
 
   const renderProduct = ({ item }) => (
     <View style={styles.productItem}>
@@ -16,14 +41,22 @@ const ProductManagement = ({ navigation }) => {
         <Text style={styles.productCategory}>{item.category}</Text>
       </View>
       <View style={styles.actions}>
-        <TouchableOpacity style={styles.actionButton}>
+        <TouchableOpacity
+          style={styles.actionButton}
+          onPress={() =>
+            navigation.navigate(AdminRoutes.EDIT_PRODUCT, { productId: item.id })
+          }
+        >
           <Ionicons
             name="pencil-outline"
             size={theme.iconSizes.md}
             color={theme.colors.primary}
           />
         </TouchableOpacity>
-        <TouchableOpacity style={styles.actionButton}>
+        <TouchableOpacity
+          style={styles.actionButton}
+          onPress={() => handleDelete(item.id)}
+        >
           <Ionicons
             name="trash-outline"
             size={theme.iconSizes.md}
@@ -48,7 +81,10 @@ const ProductManagement = ({ navigation }) => {
         contentContainerStyle={styles.listContent}
       />
 
-      <TouchableOpacity style={styles.fab}>
+      <TouchableOpacity
+        style={styles.fab}
+        onPress={() => navigation.navigate(AdminRoutes.ADD_PRODUCT)}
+      >
         <Ionicons
           name="add"
           size={theme.iconSizes.xl}

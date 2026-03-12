@@ -1,4 +1,5 @@
 import PaymentMethod from "@/enums/PaymentMethod";
+import OrderStatus from "@/enums/OrderStatus";
 
 const DEFAULT_ORDER_MODEL = Object.freeze({
   invoiceNumber: "",
@@ -15,6 +16,7 @@ const DEFAULT_ORDER_MODEL = Object.freeze({
   subtotal: 0,
   deliveryFee: 0,
   total: 0,
+  status: OrderStatus.PENDING,
   estimatedDelivery: "",
   placedAt: "",
 });

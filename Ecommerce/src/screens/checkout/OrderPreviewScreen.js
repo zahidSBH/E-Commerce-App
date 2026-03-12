@@ -45,7 +45,7 @@ const OrderPreviewScreen = ({ navigation }) => {
   };
 
   return (
-    <SafeAreaView style={styles.safeArea} edges={["top"]}>
+    <SafeAreaView style={styles.safeArea} edges={["top", "bottom"]}>
       <ScreenHeader onBackPress={handleBack} title="Order Review" />
 
       <ScrollView

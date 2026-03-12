@@ -6,6 +6,8 @@ import {
   where,
   orderBy,
   serverTimestamp,
+  updateDoc,
+  doc,
 } from "firebase/firestore";
 import { db } from "@/config/firebase";
 import createOrderModel from "@/models/orderModel";
@@ -13,11 +15,7 @@ import { convertTimestamp } from "@/utils/serializationHelpers";
 
 const ORDERS_COLLECTION = "orders";
 
-/**
- * Saves a new order to the "orders" collection in Firestore.
- * @param {string} uid - The user ID who placed the order.
- * @param {object} orderData - The order details.
- */
+ 
 const saveOrder = async ({ uid = "", orderData = {} } = {}) => {
   if (!uid) return { data: null, error: "Unauthorized: User ID required." };
 
@@ -49,10 +47,6 @@ const saveOrder = async ({ uid = "", orderData = {} } = {}) => {
   }
 };
 
-/**
- * Fetches all orders for a specific user from Firestore.
- * @param {string} uid - The user ID.
- */
 const fetchOrders = async ({ uid = "" } = {}) => {
   if (!uid) return { data: [], error: "Unauthorized: User ID required." };
 
@@ -80,4 +74,46 @@ const fetchOrders = async ({ uid = "" } = {}) => {
   }
 };
 
-export { saveOrder, fetchOrders };
+const fetchAllOrders = async () => {
+  try {
+    const ordersRef = collection(db, ORDERS_COLLECTION);
+    const q = query(ordersRef, orderBy("createdAt", "desc"));
+
+    const querySnapshot = await getDocs(q);
+    const orders = querySnapshot.docs.map((doc) => {
+      const data = doc.data();
+      return createOrderModel({
+        ...data,
+        id: doc.id,
+        createdAt: convertTimestamp(data.createdAt),
+        updatedAt: convertTimestamp(data.updatedAt),
+      });
+    });
+
+    return { data: orders, error: null };
+  } catch (err) {
+    console.error("Order service: fetchAllOrders error:", err);
+    return { data: [], error: "Failed to fetch all orders." };
+  }
+};
+ 
+const updateOrderStatus = async (orderId, status) => {
+  if (!orderId || !status) return { data: null, error: "Missing parameters." };
+
+  try {
+    const orderRef = doc(db, ORDERS_COLLECTION, orderId);
+    const now = new Date().toISOString();
+
+    await updateDoc(orderRef, {
+      status,
+      updatedAt: serverTimestamp(),
+    });
+
+    return { data: { id: orderId, status, updatedAt: now }, error: null };
+  } catch (err) {
+    console.error("Order service: updateOrderStatus error:", err);
+    return { data: null, error: "Failed to update order status." };
+  }
+};
+
+export { saveOrder, fetchOrders, fetchAllOrders, updateOrderStatus };

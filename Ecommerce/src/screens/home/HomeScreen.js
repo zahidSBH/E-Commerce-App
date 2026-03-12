@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useCallback } from "react";
+import React, { useState, useMemo, useCallback, useEffect } from "react";
 import { ScrollView, StyleSheet } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
@@ -20,8 +20,12 @@ import TabRoutes from "@/enums/TabRoutes";
 
 const HomeScreen = ({ navigation = null }) => {
   const { profile = {} } = useUserProfile();
-  const { featuredProducts = [], newArrivals = [] } = useProducts();
+  const { featuredProducts = [], newArrivals = [], loadProducts } = useProducts();
   const { cartCount = 0 } = useCart();
+
+  useEffect(() => {
+    loadProducts();
+  }, [loadProducts]);
 
    
   const [homeCategory, setHomeCategory] = useState(Category.ALL);

@@ -3,6 +3,9 @@ const AdminRoutes = Object.freeze({
   MANAGE_PRODUCTS: "ProductManagement",
   MANAGE_ORDERS: "OrderManagement",
   MANAGE_USERS: "UserManagement",
+  ADD_PRODUCT: "AddProduct",
+  EDIT_PRODUCT: "EditProduct",
+  ORDER_DETAILS: "OrderManagementDetails",
 });
 
 export default AdminRoutes;

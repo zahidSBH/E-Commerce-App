@@ -79,7 +79,7 @@ const CheckoutScreen = ({ navigation }) => {
   };
 
   return (
-    <SafeAreaView style={styles.safeArea} edges={["top"]}>
+    <SafeAreaView style={styles.safeArea} edges={["top", "bottom"]}>
       <ScreenHeader title="Checkout" onBackPress={handleBackPress} />
 
       <KeyboardAvoidingView
