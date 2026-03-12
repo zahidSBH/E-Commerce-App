@@ -29,7 +29,7 @@ const RoleBadge = ({ role = UserRole.USER }) => {
   const config = getRoleConfig(role);
   return (
     <View style={[styles.badge, { backgroundColor: config.background }]}>
-      <Ionicons name={config.icon} size={10} color={config.color} />
+      <Ionicons name={config.icon} size={theme.iconSizes.xs} color={config.color} />
       <Text style={[styles.badgeText, { color: config.color }]}>
         {config.label}
       </Text>
@@ -96,7 +96,7 @@ const UserRow = ({
 
       <Ionicons
         name="chevron-forward"
-        size={18}
+        size={theme.iconSizes.sm}
         color={theme.colors.textMuted}
       />
     </TouchableOpacity>

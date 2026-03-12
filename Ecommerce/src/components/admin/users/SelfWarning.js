@@ -7,7 +7,7 @@ const SelfWarning = () => (
   <View style={styles.container}>
     <Ionicons
       name="information-circle-outline"
-      size={16}
+      size={theme.iconSizes.sm}
       color={theme.colors.warning}
     />
     <Text style={styles.text}>You cannot modify your own account.</Text>

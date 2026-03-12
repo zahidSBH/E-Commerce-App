@@ -32,8 +32,8 @@ const styles = StyleSheet.create({
     paddingVertical: theme.spacing.md,
   },
   avatar: {
-    width: 72,
-    height: 72,
+    width: theme.sizes.iconCircleMD,
+    height: theme.sizes.iconCircleMD,
     borderRadius: theme.borderRadius.full,
     backgroundColor: theme.colors.primaryFaded,
     alignItems: 'center',
