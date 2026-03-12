@@ -8,6 +8,9 @@ import theme from "@/constants/theme";
 
 const Stack = createNativeStackNavigator();
 
+const DISABLED_ERROR =
+  "Your account has been disabled. Please contact support.";
+
 const screenOptions = {
   headerStyle: {
     backgroundColor: theme.colors.background,
@@ -21,35 +24,28 @@ const screenOptions = {
   headerBackTitleVisible: false,
 };
 
-const resolveScreen = (route) => {
-  switch (route) {
-    case AuthRoutes.LOGIN:
-      return LoginScreen;
-    case AuthRoutes.SIGN_UP:
-      return SignUpScreen;
-    default:
-      return LoginScreen;
-  }
-};
-
-const AUTH_STACK = [
-  { name: AuthRoutes.LOGIN, title: "Login" },
-  { name: AuthRoutes.SIGN_UP, title: "Create Account" },
-];
-
-const AuthNavigator = () => {
-  return (
-    <Stack.Navigator screenOptions={screenOptions}>
-      {AUTH_STACK.map((screen) => (
-        <Stack.Screen
-          key={screen.name}
-          name={screen.name}
-          component={resolveScreen(screen.name)}
-          options={{ title: screen.title }}
-        />
-      ))}
-    </Stack.Navigator>
+const buildLoginComponent =
+  (disabledError = false) =>
+  (props) => (
+    <LoginScreen
+      {...props}
+      initialError={disabledError ? DISABLED_ERROR : null}
+    />
   );
-};
+
+const AuthNavigator = ({ disabledError = false }) => (
+  <Stack.Navigator screenOptions={screenOptions}>
+    <Stack.Screen
+      name={AuthRoutes.LOGIN}
+      component={buildLoginComponent(disabledError)}
+      options={{ title: "Login" }}
+    />
+    <Stack.Screen
+      name={AuthRoutes.SIGN_UP}
+      component={SignUpScreen}
+      options={{ title: "Create Account" }}
+    />
+  </Stack.Navigator>
+);
 
 export default AuthNavigator;

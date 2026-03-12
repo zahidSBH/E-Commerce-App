@@ -11,12 +11,14 @@ import {
   validateSignUpPayload,
   validateLoginPayload,
 } from "@/utils/authPayloadValidators";
+import { fetchUserProfile } from "@/services/userService";
+
 const DEFAULT_STATE = {
   loading: false,
   error: null,
 };
 
-const resolveFirebaseError = (code) => {
+const resolveFirebaseError = (code = "") => {
   switch (code) {
     case "auth/email-already-in-use":
       return "This email is already registered.";
@@ -41,7 +43,7 @@ const useAuth = () => {
 
   const clearError = () => setError(null);
 
-  const signUp = async ({ fullName = "", email = "", password = "" }) => {
+  const signUp = async ({ fullName = "", email = "", password = "" } = {}) => {
     const validationError = validateSignUpPayload({
       fullName,
       email,
@@ -73,7 +75,7 @@ const useAuth = () => {
     }
   };
 
-  const login = async ({ email = "", password = "" }) => {
+  const login = async ({ email = "", password = "" } = {}) => {
     const validationError = validateLoginPayload({ email, password });
     if (validationError) {
       setError(validationError);
@@ -88,6 +90,26 @@ const useAuth = () => {
         email.trim(),
         password,
       );
+
+      const { data: profile, error: profileError } = await fetchUserProfile({
+        uid: userCredential.user.uid,
+      });
+
+      if (profileError) {
+        await signOut(auth);
+        const message = "Failed to verify account. Please try again.";
+        setError(message);
+        return { user: null, error: message };
+      }
+
+      if (profile?.isDisabled) {
+        await signOut(auth);
+        const message =
+          "Your account has been disabled. Please contact support.";
+        setError(message);
+        return { user: null, error: message };
+      }
+
       return { user: userCredential.user, error: null };
     } catch (err) {
       const message = resolveFirebaseError(err.code);

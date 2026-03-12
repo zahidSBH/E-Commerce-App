@@ -1,5 +1,5 @@
 import { useCallback, useMemo } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch, useSelector, shallowEqual } from "react-redux";
 import {
   loadAllUsers,
   loadUserOrders,
@@ -46,7 +46,7 @@ const useAdminUsers = (searchQuery = "") => {
     ordersError: selectOrdersError(state),
     actionError: selectActionError(state),
     totalUsers: selectTotalUsers(state),
-  }));
+  }), shallowEqual);
 
   const isLoading = status === SliceStatus.LOADING;
   const isLoadingOrders = ordersStatus === SliceStatus.LOADING;
