@@ -1,7 +1,7 @@
 const theme = Object.freeze({
   colors: {
-    primary: "#FF6B00",
-    primary20: "#cf7432ff",
+    primary: "#e66d16",
+    primary20: "rgb(248, 194, 156)",
     primaryLight: "#FF8C33",
     primaryDark: "#CC5500",
     primaryFaded: "#FFF0E6",
@@ -13,16 +13,38 @@ const theme = Object.freeze({
     textMuted: "#AAAAAA",
     white: "#FFFFFF",
     black: "#000000",
+
     error: "#D32F2F",
-    error20: "#8d2222ff",
+    error20: "rgb(248, 183, 183)",
     errorFaded: "#FFF5F5",
+
     success: "#388E3C",
-    success20: "#275f30ff",
+    success20: "rgb(180, 243, 190)",
     successFaded: "#E8F5E9",
     successDark: "#2E7D32",
+
     info: "#2196F3",
     infoFaded: "#E3F2FD",
+
     modalOverlay: "rgba(0, 0, 0, 0.5)",
+
+    warningFaded: "#FFF8E1",
+    warning: "#F59E0B",
+
+    pending: "#F59E0B",
+    pendingBg: "#FFF8E1",
+
+    processing: "#2196F3",
+    processingBg: "#E3F2FD",
+
+    shipped: "#6366F1",
+    shippedBg: "#E0E7FF",
+
+    delivered: "#388E3C",
+    deliveredBg: "#E8F5E9",
+
+    cancelled: "#D32F2F",
+    cancelledBg: "#FFF5F5",
   },
 
   typography: {
@@ -45,6 +67,8 @@ const theme = Object.freeze({
     lg: 24,
     xl: 32,
     xxl: 48,
+    badgeGap: 3,
+    badgeVertical: 2,
   },
 
   borderRadius: {
@@ -79,12 +103,15 @@ const theme = Object.freeze({
     headerBand: 140,
     avatarOuter: 104,
     avatarInner: 88,
+    avatarSM: 44,
   },
-opacity: {
-  shadow: 0.06,
-  buttonPress: 0.85,
-  disabled: 0.5
-},
+
+  opacity: {
+    shadow: 0.06,
+    buttonPress: 0.85,
+    disabled: 0.5,
+  },
+
   borderWidth: {
     hairline: 0.5,
     sm: 1,
@@ -96,6 +123,7 @@ opacity: {
     md: 4,
     lg: 8,
   },
+
   shadows: {
     modal: {
       shadowColor: "#000000",

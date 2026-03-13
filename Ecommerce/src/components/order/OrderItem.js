@@ -19,6 +19,13 @@ const getStatusColor = (status) => {
   }
 };
 
+const getItemCountText = (items = []) => {
+  const count = items.length;
+  return `${count} ${count === 1 ? "item" : "items"}`;
+};
+
+const formatTotalAmount = (total = 0) => total.toFixed(2);
+
 const OrderItem = ({ item = {} }) => {
   const {
     invoiceNumber,
@@ -28,11 +35,10 @@ const OrderItem = ({ item = {} }) => {
     total,
   } = item ?? {};
 
-  const itemsCount = (items ?? []).length;
-  const itemCountText = `${itemsCount} ${itemsCount === 1 ? "item" : "items"}`;
-  const totalAmount = (total ?? 0).toFixed(2);
+  const safeItems = items ?? [];
+  const itemCountText = getItemCountText(safeItems);
+  const totalAmount = formatTotalAmount(total);
   const formattedDate = formatDate(placedAt);
-
   const statusStyle = getStatusColor(status);
 
   return (
@@ -47,6 +53,19 @@ const OrderItem = ({ item = {} }) => {
             {status ?? "Pending"}
           </Text>
         </View>
+      </View>
+
+      <View style={styles.divider} />
+
+      <View style={styles.itemsList}>
+        {safeItems.map((prod, index) => (
+          <View key={`${prod.id}-${index}`} style={styles.productRow}>
+            <Text style={styles.productName} numberOfLines={1}>
+              {prod.name}
+            </Text>
+            <Text style={styles.productQty}>x{prod.quantity}</Text>
+          </View>
+        ))}
       </View>
 
       <View style={styles.divider} />
@@ -77,7 +96,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "flex-start",
-    marginBottom: theme.spacing.sm,
+    marginBottom: theme.spacing.xs,
   },
   invoiceNo: {
     fontSize: theme.typography.fontSizeMD,
@@ -98,6 +117,26 @@ const styles = StyleSheet.create({
     fontSize: 10,
     fontWeight: theme.typography.fontWeightBold,
     textTransform: "uppercase",
+  },
+  itemsList: {
+    marginVertical: theme.spacing.xs,
+  },
+  productRow: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    paddingVertical: 2,
+  },
+  productName: {
+    flex: 1,
+    fontSize: theme.typography.fontSizeSM,
+    color: theme.colors.textSecondary,
+    marginRight: theme.spacing.md,
+  },
+  productQty: {
+    fontSize: theme.typography.fontSizeSM,
+    color: theme.colors.textMuted,
+    fontWeight: theme.typography.fontWeightMedium,
   },
   divider: {
     height: 1,

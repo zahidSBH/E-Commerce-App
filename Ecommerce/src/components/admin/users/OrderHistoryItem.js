@@ -1,11 +1,11 @@
 import React from "react";
 import { View, Text, StyleSheet } from "react-native";
-import { getStatusColor, formatDate } from "@/utils/userDetailHelpers";
+import { getStatusColor, getStatusBgColor, formatDate } from "@/utils/userDetailHelpers";
 import theme from "@/constants/theme";
 
 const OrderHistoryItem = React.memo(({ order = {} }) => {
   const statusColor = getStatusColor(order.status);
-  const statusBgColor = `${statusColor}`;
+  const statusBgColor = getStatusBgColor(order.status);
   const invoiceNumber = order.invoiceNumber ?? "—";
 
   return (

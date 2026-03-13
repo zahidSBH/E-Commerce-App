@@ -7,6 +7,7 @@ import CheckoutScreen from "@/screens/checkout/CheckoutScreen";
 import OrderPreviewScreen from "@/screens/checkout/OrderPreviewScreen";
 import OrderCompleteScreen from "@/screens/checkout/OrderCompleteScreen";
 import OrdersScreen from "@/screens/profile/OrdersScreen";
+import WishlistScreen from "@/screens/profile/WishlistScreen";
 import ProductRoutes from "@/enums/ProductRoutes";
 import CheckoutRoutes from "@/enums/CheckoutRoutes";
 import ProfileRoutes from "@/enums/ProfileRoutes";
@@ -33,6 +34,11 @@ const MainNavigator = () => (
     <Stack.Screen
       name={ProfileRoutes.ORDER_HISTORY}
       component={OrdersScreen}
+    />
+    <Stack.Screen
+      name={ProfileRoutes.WISHLIST}
+      component={WishlistScreen}
+      options={{ headerShown: true, title: "My Wishlist" }}
     />
   </Stack.Navigator>
 );

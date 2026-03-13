@@ -114,7 +114,7 @@ const UserDetailModal = ({
                 <ActionButton
                   label={isAdmin ? "Revoke Admin" : "Make Admin"}
                   icon={
-                    isAdmin ? "shield-off-outline" : "shield-checkmark-outline"
+                    isAdmin ? "shield-half-outline" : "shield-checkmark-outline"
                   }
                   color={theme.colors.primary}
                   onPress={handleRoleToggle}
