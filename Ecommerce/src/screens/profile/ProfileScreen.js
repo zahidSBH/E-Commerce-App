@@ -32,10 +32,10 @@ const ProfileScreen = () => {
   useEffect(() => {
     if (uid) {
       loadOrderHistory(uid);
-      // Removed loadOrderCount and fetchWishlist from here as they are now
-      // pre-fetched in RootNavigator during login sync for an "instant" feel.
+      loadOrderCount(uid);
+      fetchWishlist();
     }
-  }, [uid, loadOrderHistory]);
+  }, [uid, loadOrderHistory, loadOrderCount, fetchWishlist]);
 
   const navigateToOrders = useCallback(() => {
     navigation.navigate(ProfileRoutes.ORDER_HISTORY);

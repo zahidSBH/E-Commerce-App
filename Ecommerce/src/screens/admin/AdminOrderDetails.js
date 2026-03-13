@@ -18,7 +18,7 @@ import {
   selectOrderById,
 } from "@/store/selectors/orderSelectors";
 import { updateOrder } from "@/store/thunks/orderThunks";
-import useOrderCustomer from "@/hooks/useOrderCustomer";
+import useOrderCustomer from "../../hooks/useOrderCustomer";
 import SliceStatus from "@/enums/SliceStatus";
 import formatDate from "@/utils/formatDate";
  

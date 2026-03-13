@@ -1,4 +1,4 @@
-import React, { useCallback } from "react";
+import React, { useCallback, useState } from "react";
 import {
   View,
   ScrollView,
@@ -6,6 +6,7 @@ import {
   Text,
   StyleSheet,
   ActivityIndicator,
+  Alert,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Ionicons } from "@expo/vector-icons";
@@ -20,7 +21,7 @@ import PaymentSection from "@/components/order/PaymentSection";
 import SummarySection from "@/components/order/SummarySection";
 
 import CheckoutRoutes from "@/enums/CheckoutRoutes";
-import SliceStatus from "@/enums/SliceStatus";
+import { savePlacedOrder } from "@/store/thunks/orderThunks";
 import theme from "@/constants/theme";
 
 const OrderPreviewScreen = ({ navigation = {} }) => {
@@ -31,19 +32,33 @@ const OrderPreviewScreen = ({ navigation = {} }) => {
     subtotal = 0,
     deliveryFee = 0,
     total = 0,
-    status,
     submitOrder,
   } = useOrder();
 
-  const isSubmitting = status === SliceStatus.LOADING;
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const { cartItems = [], emptyCart } = useCart();
 
   const handlePlaceOrder = useCallback(async () => {
     if (isSubmitting) return;
-    await submitOrder();
-    emptyCart();
-    navigation.navigate(CheckoutRoutes.ORDER_COMPLETE);
+
+    setIsSubmitting(true);
+    try {
+      const resultAction = await submitOrder();
+
+      if (savePlacedOrder.fulfilled.match(resultAction)) {
+        emptyCart();
+        navigation.navigate(CheckoutRoutes.ORDER_COMPLETE);
+      } else if (savePlacedOrder.rejected.match(resultAction)) {
+        const errorMessage = resultAction.payload || "An unexpected error occurred.";
+        Alert.alert("Order Failed", errorMessage);
+      }
+    } catch (err) {
+      console.error("OrderPreviewScreen: handlePlaceOrder error:", err);
+      Alert.alert("Error", "Something went wrong while placing your order.");
+    } finally {
+      setIsSubmitting(false);
+    }
   }, [isSubmitting, submitOrder, emptyCart, navigation]);
 
   const handleBack = useCallback(() => {

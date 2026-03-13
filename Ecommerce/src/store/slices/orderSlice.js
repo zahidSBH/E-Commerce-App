@@ -84,7 +84,6 @@ const orderSlice = createSlice({
       state.error = null;
       state.lastVisible = null;
       state.hasMore = true;
-      state.totalOrderCount = null;
     },
   },
   extraReducers: (builder) => {
@@ -106,6 +105,9 @@ const orderSlice = createSlice({
         state.status = SliceStatus.SUCCEEDED;
         state.history = [action.payload, ...state.history];
         state.currentOrder = action.payload;
+        if (state.totalOrderCount !== null) {
+          state.totalOrderCount += 1;
+        }
       })
       .addCase(fetchAllAdminOrders.fulfilled, (state, action) => {
         state.status = SliceStatus.SUCCEEDED;
