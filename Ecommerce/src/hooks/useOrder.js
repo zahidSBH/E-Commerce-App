@@ -1,4 +1,4 @@
-import { useCallback } from "react";
+import { useCallback, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 import {
@@ -7,18 +7,29 @@ import {
   setTransactionId,
   placeOrder,
   clearOrder,
+  clearHistory,
+} from "@/store/slices/orderSlice";
+
+import {
   selectAddress,
   selectPaymentMethod,
   selectTransactionId,
   selectCurrentOrder,
   selectOrderHistory,
   selectOrderStatus,
+  selectOrderError,
+  selectHasMoreOrders,
+} from "@/store/selectors/orderSelectors";
+
+import {
   fetchOrdersHistory,
   savePlacedOrder,
-} from "@/store/slices/orderSlice";
+  fetchOrderCount,
+} from "@/store/thunks/orderThunks";
 
 import { selectCartItems, selectCartTotal } from "@/store/slices/cartSlice";
 import { selectUserUid } from "@/store/slices/userSlice";
+import { ORDERS_PAGE_LIMIT } from "@/constants/orderConstants";
 
 import calculateDeliveryFee from "@/utils/calculateDeliveryFee";
 import createOrderModel from "@/models/orderModel";
@@ -32,13 +43,15 @@ const useOrder = () => {
   const currentOrder = useSelector(selectCurrentOrder);
   const orderHistory = useSelector(selectOrderHistory);
   const status = useSelector(selectOrderStatus);
+  const error = useSelector(selectOrderError);
+  const hasMore = useSelector(selectHasMoreOrders);
   const uid = useSelector(selectUserUid);
 
   const cartItems = useSelector(selectCartItems);
   const subtotal = useSelector(selectCartTotal);
 
-  const deliveryFee = calculateDeliveryFee(subtotal);
-  const total = subtotal + deliveryFee;
+  const deliveryFee = useMemo(() => calculateDeliveryFee(subtotal), [subtotal]);
+  const total = useMemo(() => subtotal + deliveryFee, [subtotal, deliveryFee]);
 
   const saveAddress = useCallback(
     (data = {}) => {
@@ -62,10 +75,20 @@ const useOrder = () => {
   );
 
   const loadOrderHistory = useCallback(
-    (targetUid = "") => {
-      dispatch(fetchOrdersHistory({ uid: targetUid || uid }));
+    (targetUid = "", isRefresh = false) => {
+    
+      if (isRefresh) {
+        dispatch(clearHistory());
+      }
+      
+      dispatch(fetchOrdersHistory({ 
+        uid: targetUid || uid, 
+        pageSize: ORDERS_PAGE_LIMIT,
+        isRefresh,
+      }));
     },
-    [dispatch, uid]
+    
+    [dispatch, uid]  
   );
 
   const submitOrder = useCallback(async () => {
@@ -96,6 +119,10 @@ const useOrder = () => {
     dispatch(clearOrder());
   }, [dispatch]);
 
+  const resetHistory = useCallback(() => {
+    dispatch(clearHistory());
+  }, [dispatch]);
+
   return {
     address,
     paymentMethod,
@@ -103,6 +130,8 @@ const useOrder = () => {
     currentOrder,
     orderHistory,
     status,
+    error,
+    hasMore,
     subtotal,
     deliveryFee,
     total,
@@ -110,8 +139,15 @@ const useOrder = () => {
     selectPayment,
     saveTransactionId,
     loadOrderHistory,
+    loadOrderCount: useCallback(
+      (targetUid = "") => {
+        dispatch(fetchOrderCount({ uid: targetUid || uid }));
+      },
+      [dispatch, uid]
+    ),
     submitOrder,
     resetOrder,
+    resetHistory,
   };
 };
 

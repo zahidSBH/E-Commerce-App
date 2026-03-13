@@ -6,6 +6,7 @@ import AddProductScreen from "@/screens/admin/AddProductScreen";
 import EditProductScreen from "@/screens/admin/EditProductScreen";
 import OrderManagement from "@/screens/admin/OrderManagement";
 import AdminOrderDetails from "@/screens/admin/AdminOrderDetails";
+import UserManagement from "@/screens/admin/UserManagement";
 import AdminRoutes from "@/enums/AdminRoutes";
 
 const Stack = createNativeStackNavigator();
@@ -30,6 +31,7 @@ const AdminNavigator = () => (
       name={AdminRoutes.ORDER_DETAILS}
       component={AdminOrderDetails}
     />
+    <Stack.Screen name={AdminRoutes.MANAGE_USERS} component={UserManagement} />
   </Stack.Navigator>
 );
 

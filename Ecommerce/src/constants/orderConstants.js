@@ -1,7 +1,8 @@
 const ORDER_CONSTANTS = Object.freeze({
   DELIVERY_FEE: 5.99,
+  ORDERS_PAGE_LIMIT: 5,
 });
 
-export const { DELIVERY_FEE } = ORDER_CONSTANTS;
+export const { DELIVERY_FEE, ORDERS_PAGE_LIMIT } = ORDER_CONSTANTS;
 
 export default ORDER_CONSTANTS;
