@@ -11,6 +11,11 @@ import {
   selectUserProfile,
 } from "@/store/slices/userSlice";
 import { createUserProfile } from "@/services/userService";
+import { getWishlist } from "@/store/thunks/wishlistThunks";
+import { fetchOrderCount } from "@/store/thunks/orderThunks";
+import { clearHistory } from "@/store/slices/orderSlice";
+import { clearWishlistState } from "@/store/slices/wishlistSlice";
+import { clearCart } from "@/store/slices/cartSlice";
 
 import AuthState from "@/enums/AuthState";
 import UserRole from "@/enums/UserRole";
@@ -51,6 +56,12 @@ const RootNavigator = () => {
       return null;
     }
 
+     
+    await Promise.allSettled([
+      dispatch(getWishlist({ uid: user.uid })),
+      dispatch(fetchOrderCount({ uid: user.uid })),
+    ]);
+
     return result.payload ?? null;
   };
 
@@ -62,6 +73,9 @@ const RootNavigator = () => {
         if (profileData?.isDisabled) {
           await signOut(auth);
           dispatch(clearProfile());
+          dispatch(clearHistory());
+          dispatch(clearWishlistState());
+          dispatch(clearCart());
           setAuthState(AuthState.DISABLED);
           return;
         }
@@ -71,6 +85,9 @@ const RootNavigator = () => {
         setAuthState((prev) => {
           if (prev === AuthState.DISABLED) return AuthState.DISABLED;
           dispatch(clearProfile());
+          dispatch(clearHistory());
+          dispatch(clearWishlistState());
+          dispatch(clearCart());
           return AuthState.UNAUTHENTICATED;
         });
       }

@@ -8,6 +8,7 @@ const StatItem = ({
   label = "",
   value = "0",
   onPress = null,
+  highlight = false,
 }) => (
   <TouchableOpacity
     style={styles.container}
@@ -17,9 +18,9 @@ const StatItem = ({
     <Ionicons
       name={icon}
       size={theme.iconSizes.md}
-      color={theme.colors.primary}
+      color={highlight ? theme.colors.primary : theme.colors.textMuted}
     />
-    <Text style={styles.value}>{value}</Text>
+    <Text style={[styles.value, highlight && styles.highlightValue]}>{value}</Text>
     <Text style={styles.label}>{label}</Text>
   </TouchableOpacity>
 );
@@ -34,6 +35,10 @@ const styles = StyleSheet.create({
     fontSize: theme.typography.fontSizeLG,
     fontWeight: theme.typography.fontWeightBold,
     color: theme.colors.textPrimary,
+  },
+  highlightValue: {
+    color: theme.colors.primary,
+    fontSize: theme.typography.fontSizeXL,
   },
   label: {
     fontSize: theme.typography.fontSizeXS,
