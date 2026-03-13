@@ -1,10 +1,11 @@
-import React from "react";
+import React, { useCallback } from "react";
 import {
   View,
   ScrollView,
   TouchableOpacity,
   Text,
   StyleSheet,
+  ActivityIndicator,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Ionicons } from "@expo/vector-icons";
@@ -19,9 +20,10 @@ import PaymentSection from "@/components/order/PaymentSection";
 import SummarySection from "@/components/order/SummarySection";
 
 import CheckoutRoutes from "@/enums/CheckoutRoutes";
+import SliceStatus from "@/enums/SliceStatus";
 import theme from "@/constants/theme";
 
-const OrderPreviewScreen = ({ navigation }) => {
+const OrderPreviewScreen = ({ navigation = {} }) => {
   const {
     address = {},
     paymentMethod = "",
@@ -29,20 +31,24 @@ const OrderPreviewScreen = ({ navigation }) => {
     subtotal = 0,
     deliveryFee = 0,
     total = 0,
+    status,
     submitOrder,
   } = useOrder();
 
+  const isSubmitting = status === SliceStatus.LOADING;
+
   const { cartItems = [], emptyCart } = useCart();
 
-  const handlePlaceOrder = () => {
-    submitOrder();
+  const handlePlaceOrder = useCallback(async () => {
+    if (isSubmitting) return;
+    await submitOrder();
     emptyCart();
     navigation.navigate(CheckoutRoutes.ORDER_COMPLETE);
-  };
+  }, [isSubmitting, submitOrder, emptyCart, navigation]);
 
-  const handleBack = () => {
+  const handleBack = useCallback(() => {
     navigation.goBack();
-  };
+  }, [navigation]);
 
   return (
     <SafeAreaView style={styles.safeArea} edges={["top", "bottom"]}>
@@ -76,13 +82,20 @@ const OrderPreviewScreen = ({ navigation }) => {
           style={styles.placeButton}
           onPress={handlePlaceOrder}
           activeOpacity={0.85}
+          disabled={isSubmitting}
         >
-          <Ionicons
-            name="checkmark-circle-outline"
-            size={theme.iconSizes.md}
-            color={theme.colors.white}
-          />
-          <Text style={styles.placeButtonText}>Place Order</Text>
+          {isSubmitting ? (
+            <ActivityIndicator size="small" color={theme.colors.white} />
+          ) : (
+            <Ionicons
+              name="checkmark-circle-outline"
+              size={theme.iconSizes.md}
+              color={theme.colors.white}
+            />
+          )}
+          <Text style={styles.placeButtonText}>
+            {isSubmitting ? "Placing Order..." : "Place Order"}
+          </Text>
         </TouchableOpacity>
       </View>
     </SafeAreaView>

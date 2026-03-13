@@ -84,6 +84,7 @@ const orderSlice = createSlice({
       state.error = null;
       state.lastVisible = null;
       state.hasMore = true;
+      state.totalOrderCount = null;
     },
   },
   extraReducers: (builder) => {

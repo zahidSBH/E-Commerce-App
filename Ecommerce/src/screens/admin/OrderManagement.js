@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState, useMemo } from "react";
 import {
   View,
   Text,
@@ -12,24 +12,32 @@ import { Ionicons } from "@expo/vector-icons";
 import theme from "@/constants/theme";
 import AdminRoutes from "@/enums/AdminRoutes";
 import ScreenHeader from "@/components/common/ScreenHeader";
+import ProductSearchBar from "@/components/products/ProductSearchBar";
+import { fetchAllAdminOrders } from "@/store/thunks/orderThunks";
 import {
-  fetchAllAdminOrders,
   selectAdminOrders,
   selectOrderStatus,
-} from "@/store/slices/orderSlice";
+} from "@/store/selectors/orderSelectors";
 import SliceStatus from "@/enums/SliceStatus";
-
- 
 import OrderCard from "@/components/admin/orders/OrderCard";
 
 const OrderManagement = ({ navigation }) => {
   const dispatch = useDispatch();
   const orders = useSelector(selectAdminOrders);
   const status = useSelector(selectOrderStatus);
+  const [searchQuery, setSearchQuery] = useState("");
 
   useEffect(() => {
     dispatch(fetchAllAdminOrders());
   }, [dispatch]);
+
+  const filteredOrders = useMemo(() => {
+    if (!searchQuery.trim()) return orders;
+    const query = searchQuery.toLowerCase();
+    return orders.filter((order) =>
+      order.invoiceNumber?.toLowerCase().includes(query)
+    );
+  }, [orders, searchQuery]);
 
   const renderOrderItem = ({ item }) => (
     <OrderCard
@@ -57,8 +65,15 @@ const OrderManagement = ({ navigation }) => {
         onBackPress={() => navigation.goBack()}
       />
 
+      <ProductSearchBar
+        value={searchQuery}
+        onChangeText={setSearchQuery}
+        onClear={() => setSearchQuery("")}
+        placeholder="Search by invoice number..."
+      />
+
       <FlatList
-        data={orders}
+        data={filteredOrders}
         renderItem={renderOrderItem}
         keyExtractor={(item) => item.id}
         contentContainerStyle={styles.listContent}

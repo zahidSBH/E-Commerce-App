@@ -11,16 +11,32 @@ import { Ionicons } from "@expo/vector-icons";
 
 import ScreenHeader from "@/components/common/ScreenHeader";
 import OrderItem from "@/components/order/OrderItem";
+import OrderListEmptyState from "@/components/order/OrderListEmptyState";
+import OrderListErrorState from "@/components/order/OrderListErrorState";
+import OrderListLoadingState from "@/components/order/OrderListLoadingState";
+import OrderListFooterLoading from "@/components/order/OrderListFooterLoading";
 import useOrder from "@/hooks/useOrder";
 import SliceStatus from "@/enums/SliceStatus";
 import theme from "@/constants/theme";
 
-const OrdersScreen = ({ navigation }) => {
-  const { orderHistory, status, loadOrderHistory } = useOrder();
+const OrdersScreen = ({ navigation = {} }) => {
+  const { orderHistory, status, error, loadOrderHistory, hasMore } = useOrder();
+  const isLoading = status === SliceStatus.LOADING;
+  const isFailed = status === SliceStatus.FAILED;
 
   useEffect(() => {
-    loadOrderHistory();
+    loadOrderHistory("", true);
   }, [loadOrderHistory]);
+
+  const handleRefresh = useCallback(() => {
+    loadOrderHistory("", true);
+  }, [loadOrderHistory]);
+
+  const handleLoadMore = useCallback(() => {
+    if (hasMore && !isLoading && !isFailed) {
+      loadOrderHistory();
+    }
+  }, [hasMore, isLoading, isFailed, loadOrderHistory]);
 
   const handleBack = useCallback(() => {
     navigation.goBack();
@@ -32,46 +48,39 @@ const OrdersScreen = ({ navigation }) => {
 
   const keyExtractor = useCallback((item) => item.id || item.invoiceNumber, []);
 
-  const EmptyState = () => (
-    <View style={styles.emptyContainer}>
-      <View style={styles.emptyIconWrapper}>
-        <Ionicons
-          name="bag-handle-outline"
-          size={50}
-          color={theme.colors.textMuted}
-        />
-      </View>
-      <Text style={styles.emptyTitle}>No orders yet</Text>
-      <Text style={styles.emptySubtitle}>
-        Manage your orders and view their history here once you place them.
-      </Text>
-    </View>
-  );
-
-  const LoadingState = () => (
-    <View style={styles.center}>
-      <ActivityIndicator size="large" color={theme.colors.primary} />
-    </View>
-  );
-
   const isInitialLoading = status === SliceStatus.LOADING && orderHistory.length === 0;
+  const isInitialError = status === SliceStatus.FAILED && orderHistory.length === 0;
+
+  const renderEmptyState = useCallback(() => <OrderListEmptyState />, []);
+  const renderFooterLoading = useCallback(() => (
+    <OrderListFooterLoading 
+      hasMore={hasMore} 
+      orderCount={orderHistory.length} 
+      isFailed={isFailed} 
+    />
+  ), [hasMore, orderHistory.length, isFailed]);
 
   return (
     <SafeAreaView style={styles.safeArea} edges={["top"]}>
       <ScreenHeader title="My Orders" onBackPress={handleBack} />
 
       {isInitialLoading ? (
-        <LoadingState />
+        <OrderListLoadingState />
+      ) : isInitialError ? (
+        <OrderListErrorState error={error} onRefresh={handleRefresh} />
       ) : (
         <FlatList
           data={orderHistory}
           keyExtractor={keyExtractor}
           renderItem={renderOrderItem}
           contentContainerStyle={styles.listContent}
-          ListEmptyComponent={<EmptyState />}
+          ListEmptyComponent={renderEmptyState}
+          ListFooterComponent={renderFooterLoading}
           showsVerticalScrollIndicator={false}
-          onRefresh={loadOrderHistory}
-          refreshing={status === SliceStatus.LOADING}
+          onRefresh={handleRefresh}
+          refreshing={isLoading && orderHistory.length > 0}
+          onEndReached={handleLoadMore}
+          onEndReachedThreshold={0.5}
         />
       )}
     </SafeAreaView>
@@ -86,38 +95,6 @@ const styles = StyleSheet.create({
   listContent: {
     padding: theme.spacing.md,
     flexGrow: 1,
-  },
-  center: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  emptyContainer: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    paddingHorizontal: theme.spacing.xxl,
-  },
-  emptyIconWrapper: {
-    width: 100,
-    height: 100,
-    borderRadius: 50,
-    backgroundColor: theme.colors.surface,
-    justifyContent: "center",
-    alignItems: "center",
-    marginBottom: theme.spacing.lg,
-  },
-  emptyTitle: {
-    fontSize: theme.typography.fontSizeXL,
-    fontWeight: theme.typography.fontWeightBold,
-    color: theme.colors.textPrimary,
-    marginBottom: theme.spacing.sm,
-  },
-  emptySubtitle: {
-    fontSize: theme.typography.fontSizeMD,
-    color: theme.colors.textMuted,
-    textAlign: "center",
-    lineHeight: 20,
   },
 });
 
