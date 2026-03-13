@@ -10,7 +10,7 @@ const AppConstants = Object.freeze({
   PRODUCT_NAME_MAX_LENGTH: 100,
   PRODUCT_DESCRIPTION_MIN_LENGTH: 10,
   PRODUCT_PRICE_MIN: 1,
-  
+  DEFAULT_PRODUCT_IMAGE: "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=800",
 });
 
 export default AppConstants;

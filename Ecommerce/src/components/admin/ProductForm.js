@@ -6,6 +6,7 @@ import PrimaryButton from "@/components/PrimaryButton";
 import Category from "@/enums/Category";
 import productValidation from "@/validation/productValidation";
 import theme from "@/constants/theme";
+import AppConstants from "@/constants/AppConstants";
 
 const ProductForm = ({
   initialValues = {},
@@ -23,7 +24,7 @@ const ProductForm = ({
       description: initialValues.description ?? "",
       price: String(initialValues.price ?? ""),
       category: initialValues.category ?? Category.ELECTRONICS,
-      imageUrl: initialValues.imageUrl ?? "",
+      imageUrl: initialValues.imageUrl ?? AppConstants.DEFAULT_PRODUCT_IMAGE,
       isFeatured: initialValues.isFeatured ?? false,
       isNew: initialValues.isNew ?? false,
     },

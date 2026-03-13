@@ -2,27 +2,38 @@ import React, { useEffect, useCallback } from "react";
 import { View, Text, StyleSheet } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
+import { useSelector } from "react-redux";
 
 import useUserProfile from "@/hooks/useUserProfile";
 import useAuth from "@/hooks/useAuth";
 import useOrder from "@/hooks/useOrder";
+import { selectTotalOrderCount } from "@/store/selectors/orderSelectors";
+import { selectWishlistCount } from "@/store/selectors/wishlistSelectors";
+import useWishlist from "@/hooks/useWishlist";
 
 import Avatar from "@/components/profile/Avatar";
 import StatItem from "@/components/profile/StatItem";
 import LogoutButton from "@/components/profile/LogoutButton";
+import ProfileNotLoaded from "@/components/profile/ProfileNotLoaded";
 
 import theme from "@/constants/theme";
 import ProfileRoutes from "@/enums/ProfileRoutes";
-
+ 
 const ProfileScreen = () => {
   const navigation = useNavigation();
   const { profile, isProfileLoaded, uid } = useUserProfile();
   const { logout, loading } = useAuth();
-  const { orderHistory, loadOrderHistory } = useOrder();
+  const { loadOrderHistory, loadOrderCount } = useOrder();
+  const { fetchItems: fetchWishlist } = useWishlist();
+  
+  const totalOrderCount = useSelector(selectTotalOrderCount);
+  const wishlistCount = useSelector(selectWishlistCount);
 
   useEffect(() => {
     if (uid) {
       loadOrderHistory(uid);
+      // Removed loadOrderCount and fetchWishlist from here as they are now
+      // pre-fetched in RootNavigator during login sync for an "instant" feel.
     }
   }, [uid, loadOrderHistory]);
 
@@ -30,17 +41,15 @@ const ProfileScreen = () => {
     navigation.navigate(ProfileRoutes.ORDER_HISTORY);
   }, [navigation]);
 
-  const NotLoaded = () => (
-    <View style={styles.center}>
-      <Text style={styles.email}>No profile data found.</Text>
-    </View>
-  );
+  const navigateToWishlist = useCallback(() => {
+    navigation.navigate(ProfileRoutes.WISHLIST);
+  }, [navigation]);
 
   if (!isProfileLoaded) {
-    return <NotLoaded />;
+    return <ProfileNotLoaded />;
   }
 
-  const orderCount = orderHistory.length.toString();
+  const orderCount = totalOrderCount !== null ? totalOrderCount.toString() : "0";
 
   return (
     <View style={styles.container}>
@@ -68,11 +77,16 @@ const ProfileScreen = () => {
             label="Orders"
             value={orderCount}
             onPress={navigateToOrders}
+            highlight={true}
           />
           <View style={styles.statDivider} />
-          <StatItem icon="heart-outline" label="Wishlist" value="0" />
-          <View style={styles.statDivider} />
-          <StatItem icon="star-outline" label="Reviews" value="0" />
+          <StatItem
+            icon="heart-outline"
+            label="Wishlist"
+            value={wishlistCount.toString()}
+            onPress={navigateToWishlist}
+            highlight={true}
+          />
         </View>
 
         <View style={styles.divider} />
@@ -87,12 +101,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: theme.colors.surface,
-  },
-  center: {
-    flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
-    backgroundColor: theme.colors.background,
   },
   headerBand: {
     height: theme.sizes.headerBand,

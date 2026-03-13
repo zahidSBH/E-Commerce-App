@@ -1,9 +1,11 @@
 import React, { useState, useMemo } from "react";
-import { View, Text, Image, ScrollView, StyleSheet, Dimensions } from "react-native";
+import { View, Text, Image, ScrollView, StyleSheet, Dimensions, TouchableOpacity } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { Ionicons } from "@expo/vector-icons";
 
 import useCart from "@/hooks/useCart";
 import useProducts from "@/hooks/useProducts";
+import useWishlist from "@/hooks/useWishlist";
 
 import ScreenHeader from "@/components/common/ScreenHeader";
 import CartBadgeButton from "@/components/common/CartBadgeButton";
@@ -27,6 +29,9 @@ const ProductDetailScreen = ({ navigation = null, route = {} }) => {
   const { isInCart, cartItem, addItem, increment, decrement, cartCount } =
     useCart(productId);
 
+  const { toggleWishlist, isItemInWishlist } = useWishlist();
+  const isInWishlist = isItemInWishlist(productId);
+
   const [quantity, setQuantity] = useState(1);
 
   const currentQuantity = isInCart ? (cartItem?.quantity ?? 1) : quantity;
@@ -49,8 +54,22 @@ const ProductDetailScreen = ({ navigation = null, route = {} }) => {
   };
 
   const RightComponent = useMemo(
-    () => () => <CartBadgeButton cartCount={cartCount} onPress={navigateToCart} />,
-    [cartCount, navigateToCart]
+    () => () => (
+      <View style={styles.headerRight}>
+        <TouchableOpacity 
+          onPress={() => toggleWishlist(product)} 
+          style={styles.wishlistHeaderButton}
+        >
+          <Ionicons 
+            name={isInWishlist ? "heart" : "heart-outline"} 
+            size={24} 
+            color={isInWishlist ? theme.colors.error : theme.colors.textPrimary} 
+          />
+        </TouchableOpacity>
+        <CartBadgeButton cartCount={cartCount} onPress={navigateToCart} />
+      </View>
+    ),
+    [cartCount, navigateToCart, isInWishlist, toggleWishlist, product]
   );
 
   if (!product) {
@@ -182,6 +201,14 @@ const styles = StyleSheet.create({
     borderTopWidth: theme.borderWidth.sm,
     borderTopColor: theme.colors.border,
     backgroundColor: theme.colors.white,
+  },
+  headerRight: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: theme.spacing.sm,
+  },
+  wishlistHeaderButton: {
+    padding: theme.spacing.xs,
   },
 });
 

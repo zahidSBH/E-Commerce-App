@@ -3,6 +3,7 @@ import { View, Text, Image, TouchableOpacity, StyleSheet } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import theme from "@/constants/theme";
 import createProductModel from "@/models/productModel";
+import useWishlist from "@/hooks/useWishlist";
 
 const DiscountBadge = ({ discount = 0 }) => {
   if (!discount || discount <= 0) return null;
@@ -44,6 +45,14 @@ const ProductCard = ({
   onPress = () => {},
   width = 160,
 }) => {
+  const { toggleWishlist, isItemInWishlist } = useWishlist();
+  const isInWishlist = isItemInWishlist(product.id);
+
+  const handleToggleWishlist = (e) => {
+    // Prevent event bubbling so the card onPress doesn't trigger
+    e?.stopPropagation?.();
+    toggleWishlist(product);
+  };
   return (
     <TouchableOpacity
       style={[styles.card, { width }]}
@@ -58,6 +67,18 @@ const ProductCard = ({
         />
         <DiscountBadge discount={product.discount} />
         <NewBadge isNew={product.isNew} />
+        
+        <TouchableOpacity 
+          style={styles.wishlistButton} 
+          onPress={handleToggleWishlist}
+          activeOpacity={0.8}
+        >
+          <Ionicons 
+            name={isInWishlist ? "heart" : "heart-outline"} 
+            size={20} 
+            color={isInWishlist ? theme.colors.error : theme.colors.textMuted} 
+          />
+        </TouchableOpacity>
       </View>
       <View style={styles.details}>
         <Text style={styles.category}>{product.category}</Text>
@@ -167,6 +188,22 @@ const styles = StyleSheet.create({
     fontSize: theme.typography.fontSizeXS,
     color: theme.colors.textMuted,
     textDecorationLine: "line-through",
+  },
+  wishlistButton: {
+    position: "absolute",
+    top: theme.spacing.sm,
+    right: theme.spacing.sm,
+    backgroundColor: theme.colors.white,
+    width: 32,
+    height: 32,
+    borderRadius: 16,
+    justifyContent: "center",
+    alignItems: "center",
+    shadowColor: theme.colors.black,
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 3,
   },
 });
 

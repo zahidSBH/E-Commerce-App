@@ -1,3 +1,4 @@
+import React, { useState, useMemo } from "react";
 import {
   View,
   Text,
@@ -14,10 +15,20 @@ import useProducts from "@/hooks/useProducts";
 import { deleteProduct } from "@/store/slices/productSlice";
 import AdminRoutes from "@/enums/AdminRoutes";
 import ScreenHeader from "@/components/common/ScreenHeader";
+import ProductSearchBar from "@/components/products/ProductSearchBar";
 
 const ProductManagement = ({ navigation }) => {
   const dispatch = useDispatch();
   const { allProducts } = useProducts();
+  const [searchQuery, setSearchQuery] = useState("");
+
+  const filteredProducts = useMemo(() => {
+    if (!searchQuery.trim()) return allProducts;
+    const query = searchQuery.toLowerCase();
+    return allProducts.filter((product) =>
+      product.name?.toLowerCase().includes(query)
+    );
+  }, [allProducts, searchQuery]);
 
   const handleDelete = (id) => {
     Alert.alert(
@@ -74,8 +85,15 @@ const ProductManagement = ({ navigation }) => {
         onBackPress={() => navigation.goBack()}
       />
 
+      <ProductSearchBar
+        value={searchQuery}
+        onChangeText={setSearchQuery}
+        onClear={() => setSearchQuery("")}
+        placeholder="Search by product name..."
+      />
+
       <FlatList
-        data={allProducts}
+        data={filteredProducts}
         renderItem={renderProduct}
         keyExtractor={(item) => item.id}
         contentContainerStyle={styles.listContent}

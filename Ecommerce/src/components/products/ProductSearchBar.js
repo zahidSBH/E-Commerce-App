@@ -8,6 +8,7 @@ const ProductSearchBar = ({
   onChangeText = () => {},
   onClear = () => {},
   autoFocus = false,
+  placeholder = "Search projects...",
 }) => (
   <View style={styles.container}>
     <Ionicons
@@ -18,7 +19,7 @@ const ProductSearchBar = ({
 
     <TextInput
       style={styles.input}
-      placeholder="Search products..."
+      placeholder={placeholder}
       placeholderTextColor={theme.colors.textMuted}
       value={value}
       onChangeText={onChangeText}

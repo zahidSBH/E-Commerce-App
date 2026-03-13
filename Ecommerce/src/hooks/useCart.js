@@ -19,8 +19,8 @@ const useCart = (productId = "") => {
   const cartItems = useSelector(selectCartItems);
   const cartCount = useSelector(selectCartCount);
   const cartTotal = useSelector(selectCartTotal);
-  const isInCart = useSelector(selectIsInCart(productId));
-  const cartItem = useSelector(selectCartItemByProductId(productId));
+  const isInCart = useSelector((state) => selectIsInCart(state, productId));
+  const cartItem = useSelector((state) => selectCartItemByProductId(state, productId));
 
   const addItem = useCallback(
     (product = {}) => {

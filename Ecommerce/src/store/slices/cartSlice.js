@@ -68,16 +68,15 @@ const selectCartTotal = createSelector([selectCartItems], (items) =>
   items.reduce((total, item) => total + item.price * item.quantity, 0)
 );
 
-const selectIsInCart = (productId) =>
-  createSelector([selectCartItems], (items) =>
-    items.some((item) => item.productId === productId)
-  );
+const selectIsInCart = createSelector(
+  [selectCartItems, (state, productId) => productId],
+  (items, productId) => items.some((item) => item.productId === productId)
+);
 
-const selectCartItemByProductId = (productId) =>
-  createSelector(
-    [selectCartItems],
-    (items) => findByProductId(items, productId) ?? null
-  );
+const selectCartItemByProductId = createSelector(
+  [selectCartItems, (state, productId) => productId],
+  (items, productId) => findByProductId(items, productId) ?? null
+);
 
 export const {
   addToCart,

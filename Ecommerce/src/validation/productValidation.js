@@ -1,7 +1,7 @@
 import AppConstants from "@/constants/AppConstants";
 
 const PRICE_REGEX = /^\d+(\.\d{1,2})?$/;
-const URL_REGEX = /^(https?:\/\/.*\.(?:png|jpg|jpeg|webp|gif))$/i;
+const URL_REGEX = /^https?:\/\/.+/i;
 
 export const productValidation = Object.freeze({
   name: {
